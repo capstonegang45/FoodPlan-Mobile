@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              height: 700,
+              height: 750,
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: GridView.builder(
                 scrollDirection: Axis.vertical,
@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            SizedBox(height: 2),
+            SizedBox(height: 2.0),
 
             // Rekomendasi Diet Lainnya section
             Padding(
@@ -250,11 +250,11 @@ class DietCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(2.0),
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 4.0, horizontal: 8.0),
+                      vertical: 4.0, horizontal: 10.0),
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 68, 91, 75),
                     borderRadius: BorderRadius.circular(10),
