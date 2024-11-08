@@ -4,15 +4,15 @@ class DetailRencanaPage extends StatelessWidget {
   final String title;
   final String imagePath;
 
-  DetailRencanaPage({required this.title, required this.imagePath});
+  const DetailRencanaPage({super.key, required this.title, required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 68, 91, 75),
-        title: Text("Detail Rencana"),
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+        backgroundColor: const Color.fromARGB(255, 68, 91, 75),
+        title: const Text("Detail Rencana"),
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
       body: Column(
         children: [
@@ -27,15 +27,15 @@ class DetailRencanaPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               Container(
-                padding: EdgeInsets.all(8.0),
-                margin: EdgeInsets.only(bottom: 15, left: 10),
+                padding: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.only(bottom: 15, left: 10),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 68, 91, 75),
+                  color: const Color.fromARGB(255, 68, 91, 75),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -51,7 +51,7 @@ class DetailRencanaPage extends StatelessWidget {
               length: 3,
               child: Column(
                 children: [
-                  TabBar(
+                  const TabBar(
                     indicatorColor: Color.fromARGB(255, 68, 91, 75),
                     labelColor: Color.fromARGB(255, 68, 91, 75),
                     unselectedLabelColor: Colors.grey,
@@ -70,7 +70,7 @@ class DetailRencanaPage extends StatelessWidget {
                       children: [
                         // Content for Informasi Rencana tab
                         Padding(
-                          padding: EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,19 +80,19 @@ class DetailRencanaPage extends StatelessWidget {
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.grey[700]),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Text(
                                   'Konsultasikan dengan dokter Anda sebelum memulai rencana ini dengan aman. Kami tidak bertanggung jawab atas cedera atau masalah kesehatan yang mungkin terjadi selama menjalankan program ini.',
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.grey[700]),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Text(
                                   'Durasi: 28 hari\nTingkat Kesulitan: Pemula\nKomitmen: Harian',
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.grey[700]),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Text(
                                   'Pilih rencana ini jika:',
                                   style: TextStyle(
@@ -101,7 +101,7 @@ class DetailRencanaPage extends StatelessWidget {
                                     color: Colors.grey[800],
                                   ),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
                                   '• Anda baru memulai pola makan seimbang dan membutuhkan panduan.\n'
                                   '• Anda ingin meningkatkan kualitas makanan sehari-hari dengan cara yang mudah diikuti.\n'
@@ -109,7 +109,7 @@ class DetailRencanaPage extends StatelessWidget {
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.grey[700]),
                                 ),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 Text(
                                   'Apa yang akan Anda lakukan:',
                                   style: TextStyle(
@@ -118,7 +118,7 @@ class DetailRencanaPage extends StatelessWidget {
                                     color: Colors.grey[800],
                                   ),
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
                                   '• Belajar menyusun menu makanan yang seimbang sesuai kebutuhan nutrisi Anda.\n'
                                   '• Mengatur porsi makanan untuk mencapai tujuan kesehatan Anda.\n'
@@ -133,7 +133,7 @@ class DetailRencanaPage extends StatelessWidget {
 
                         // Content for Rekomendasi Makanan tab
                         Padding(
-                          padding: EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: SingleChildScrollView(
                             child: Text(
                               'Rekomendasi makanan yang cocok untuk diet ini.',
@@ -144,7 +144,7 @@ class DetailRencanaPage extends StatelessWidget {
                         ),
                         // Content for Aktivitas tab
                         Padding(
-                          padding: EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: SingleChildScrollView(
                             child: Text(
                               'Aktivitas atau olahraga yang direkomendasikan untuk mendukung diet ini.',

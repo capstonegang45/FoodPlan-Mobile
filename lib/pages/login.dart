@@ -1,32 +1,108 @@
 import 'package:flutter/material.dart';
+import '../helpers/login_helper.dart';
+import '../widgets/custom_textfield.dart'; // Import the custom widget
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  String _message = '';
+  bool _isPasswordVisible = false;
+
+  void _login() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    // Validate input
+    if (email.isEmpty || password.isEmpty) {
+      setState(() {
+        _message = 'Both fields are required.';
+      });
+      _showErrorDialog(_message);
+      return;
+    }
+
+    // Call the login helper function
+    final response = await login(email, password);
+    setState(() {
+      _message = response['message'];
+    });
+
+    if (response.containsKey('user')) {
+      // If 'user' is present in the response, login is successful
+      _showSuccessDialog(_message);
+    } else {
+      // If no 'user' key, it's an error response
+      _showErrorDialog(_message);
+    }
+  }
+
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Login Successful'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/validasi');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Login Failed'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: SingleChildScrollView(
-        // Ensure scrolling capability
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment:
-              MainAxisAlignment.start, // Align items at the start
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Centered logo
             Center(
               child: Image.asset('assets/img/logolagi.png', height: 130),
             ),
-            SizedBox(height: 10),
-
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'Masuk',
               style: TextStyle(
                 fontSize: 24,
@@ -34,104 +110,88 @@ class LoginScreen extends StatelessWidget {
                 color: Color.fromARGB(255, 68, 91, 75),
               ),
             ),
-            SizedBox(height: 5),
-
-            // Left-aligned subtitle
-            Text(
+            const SizedBox(height: 5),
+            const Text(
               'Masuk untuk melanjutkan menggunakan aplikasi',
               style: TextStyle(fontSize: 10, color: Colors.grey),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
 
-            // Email field
-            TextField(
-              cursorColor: Color.fromARGB(255, 68, 91, 75),
-              style: TextStyle(color: Color.fromARGB(255, 68, 91, 75)),
-              decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle: TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
-                hintText: 'Masukkan email Anda',
-                hintStyle: TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
+            // Email input using custom widget
+            customTextField(
+              controller: _emailController,
+              labelText: 'Email',
+              hintText: 'Masukkan email Anda',
+            ),
+            const SizedBox(height: 10),
+
+            // Password input using custom widget with visibility toggle
+            customTextField(
+              controller: _passwordController,
+              labelText: 'Kata sandi',
+              hintText: 'Masukkan kata sandi Anda',
+              obscureText: !_isPasswordVisible,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: const Color.fromARGB(255, 68, 91, 75),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
-                  borderRadius: BorderRadius.circular(30),
-                ),
+                onPressed: () {
+                  setState(() {
+                    _isPasswordVisible = !_isPasswordVisible;
+                  });
+                },
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
-            // Password field
-            TextField(
-              cursorColor: Color.fromARGB(255, 68, 91, 75),
-              style: TextStyle(color: Color.fromARGB(255, 68, 91, 75)),
-              decoration: InputDecoration(
-                labelText: 'Kata sandi',
-                labelStyle: TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
-                hintText: 'Masukkan kata sandi Anda',
-                hintStyle: TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-
-            // Forgot password
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () {},
-                child: Text(
+                onPressed: () {
+                  // Add forgot password logic here
+                },
+                child: const Text(
                   'Lupa Password?',
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            // Login button
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                    context, '/validasi');
-              },
+              onPressed: _login,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 68, 91, 75),
-                minimumSize: Size(double.infinity, 50),
+                backgroundColor: const Color.fromARGB(255, 68, 91, 75),
+                minimumSize: const Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'MASUK',
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            // Google login option
-            Row(
+            const Row(
               children: [
                 Expanded(child: Divider(thickness: 1)),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text('Atau Gunakan'),
                 ),
                 Expanded(child: Divider(thickness: 1)),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Center(
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  // Add Google login logic here
+                },
                 child: Image.asset(
                   'assets/img/google.png',
                   height: 50,
@@ -139,17 +199,16 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
 
-            // Register option
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Belum punya akun? "),
+                const Text("Belum punya akun? "),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, '/register');
                   },
-                  child: Text(
+                  child: const Text(
                     'Daftar',
                     style: TextStyle(
                       color: Color.fromARGB(255, 68, 91, 75),

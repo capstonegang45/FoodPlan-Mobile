@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProfileSettingsPage extends StatelessWidget {
+  const ProfileSettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pengaturan Profil'),
+        title: const Text('Pengaturan Profil'),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -24,7 +26,7 @@ class ProfileSettingsPage extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   height: 150,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/img/lean_clean.png'),
                       fit: BoxFit.cover,
@@ -33,7 +35,7 @@ class ProfileSettingsPage extends StatelessWidget {
                 ),
 
                 // Foto profil
-                Positioned(
+                const Positioned(
                   bottom:
                       -30, 
                   child: CircleAvatar(
@@ -53,7 +55,7 @@ class ProfileSettingsPage extends StatelessWidget {
                     backgroundColor: Colors.black,
                     child: IconButton(
                       padding: EdgeInsets.zero,
-                      icon: Icon(Icons.edit, color: Colors.white, size: 15),
+                      icon: const Icon(Icons.edit, color: Colors.white, size: 15),
                       onPressed: () {
                         // Implementasi fungsi edit profil
                       },
@@ -63,19 +65,19 @@ class ProfileSettingsPage extends StatelessWidget {
               ],
             ),
 
-            SizedBox(height: 40), // Space for the profile picture
+            const SizedBox(height: 40), // Space for the profile picture
 
             // Profile details
-            Text(
+            const Text(
               'Ilham Hatta Manggala',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            Text('admin123@gmail.com', style: TextStyle(color: Colors.grey)),
-            SizedBox(height: 20),
+            const Text('admin123@gmail.com', style: TextStyle(color: Colors.grey)),
+            const SizedBox(height: 20),
 
             // Information fields
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
                   ProfileInfoRow(
@@ -97,7 +99,7 @@ class ProfileInfoRow extends StatelessWidget {
   final String label;
   final String value;
 
-  ProfileInfoRow({required this.label, required this.value});
+  const ProfileInfoRow({super.key, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -108,9 +110,9 @@ class ProfileInfoRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
-          Text(value, style: TextStyle(fontSize: 16)),
+          Text(value, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );

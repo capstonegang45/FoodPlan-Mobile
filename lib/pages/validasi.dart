@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:food_plan/pages/home_page.dart';
+// import 'package:food_plan/pages/home_page.dart';
 
 class ValidasiScreen extends StatefulWidget {
+  const ValidasiScreen({super.key});
+
   @override
   ValidasiFormScreenState createState() => ValidasiFormScreenState();
 }
@@ -19,9 +21,9 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Informasi tambahan'),
+        title: const Text('Informasi tambahan'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -41,24 +43,24 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                     height: 150,
                   ),
                 ),
-                SizedBox(height: 20),
-                Text(
+                const SizedBox(height: 20),
+                const Text(
                   'Mari mulai dengan menentukan target.',
                   style: TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Diet Type Dropdown
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText: 'Pilih Jenis Diet',
                     labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
@@ -83,19 +85,19 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                   validator: (value) =>
                       value == null ? 'Pilih jenis diet' : null,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Gender Dropdown
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText: 'Pilih Jenis Kelamin',
                     labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
@@ -117,7 +119,7 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                   validator: (value) =>
                       value == null ? 'Pilih jenis kelamin' : null,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Age Field
                 TextFormField(
@@ -126,12 +128,12 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                     labelText: 'Usia',
                     suffixText: 'tahun',
                     labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
@@ -141,21 +143,21 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                   validator: (value) =>
                       value!.isEmpty ? 'Masukkan usia Anda' : null,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Height Field
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     labelText: 'Masukkan Tinggi Badan',
                     suffixText: 'Cm',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
@@ -165,21 +167,21 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                   validator: (value) =>
                       value!.isEmpty ? 'Masukkan tinggi badan Anda' : null,
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Weight Field
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     labelText: 'Masukkan Berat Badan',
                     suffixText: 'Kg',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
@@ -189,7 +191,7 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                   validator: (value) =>
                       value!.isEmpty ? 'Masukkan berat badan Anda' : null,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Next Button
                 SizedBox(
@@ -202,12 +204,12 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 68, 91, 75),
+                      backgroundColor: const Color.fromARGB(255, 68, 91, 75),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Next',
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),

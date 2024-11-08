@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Overview1 extends StatelessWidget {
+  const Overview1({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,10 +17,10 @@ class Overview1 extends StatelessWidget {
               'assets/img/food_plate.png',
               height: 200,
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             // Title
-            Text(
+            const Text(
               'Welcome to\nFOODPLAN',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -27,10 +29,10 @@ class Overview1 extends StatelessWidget {
                 color: Color.fromARGB(255, 68, 91, 75),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Description
-            Text(
+            const Text(
               'Saatnya menjaga kesehatan dengan pola makan yang seimbang. Mulailah perjalanan diet sehatmu sekarang!',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -38,7 +40,7 @@ class Overview1 extends StatelessWidget {
                 color: Colors.black54,
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             // Page Indicator
             Row(
@@ -49,7 +51,7 @@ class Overview1 extends StatelessWidget {
                 _buildPageIndicator(isActive: false),
               ],
             ),
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
 
             // Skip and Next Buttons
             Row(
@@ -59,7 +61,7 @@ class Overview1 extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/loginorregister');
                   },
-                  child: Text(
+                  child: const Text(
                     'LEWATI',
                     style: TextStyle(color: Colors.black54),
                   ),
@@ -69,9 +71,9 @@ class Overview1 extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, '/overview2');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 68, 91, 75),
+                    backgroundColor: const Color.fromARGB(255, 68, 91, 75),
                   ),
-                  child: Text(
+                  child: const Text(
                     'LANJUT',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -86,11 +88,11 @@ class Overview1 extends StatelessWidget {
 
   Widget _buildPageIndicator({required bool isActive}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      margin: const EdgeInsets.symmetric(horizontal: 4.0),
       height: 8.0,
       width: isActive ? 24.0 : 8.0,
       decoration: BoxDecoration(
-        color: isActive ? Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
+        color: isActive ? const Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
         borderRadius: BorderRadius.circular(4.0),
       ),
     );
@@ -98,6 +100,8 @@ class Overview1 extends StatelessWidget {
 }
 
 class Overview2 extends StatelessWidget {
+  const Overview2({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,10 +116,10 @@ class Overview2 extends StatelessWidget {
               'assets/img/food_plate.png',
               height: 200,
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             // Title
-            Text(
+            const Text(
               'Butuh inspirasi diet sehat?',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -124,10 +128,10 @@ class Overview2 extends StatelessWidget {
                 color: Color.fromARGB(255, 68, 91, 75),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Description
-            Text(
+            const Text(
               'Dapatkan rekomendasi masakan dan rencana diet dari bahan yang kamu punya. Mulai langkah baru hari ini!',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -135,7 +139,7 @@ class Overview2 extends StatelessWidget {
                 color: Colors.black54,
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             // Page Indicator
             Row(
@@ -146,7 +150,7 @@ class Overview2 extends StatelessWidget {
                 _buildPageIndicator(isActive: false),
               ],
             ),
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
 
             // Skip and Next Buttons
             Row(
@@ -156,7 +160,7 @@ class Overview2 extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/loginorregister');
                   },
-                  child: Text(
+                  child: const Text(
                     'LEWATI',
                     style: TextStyle(color: Colors.black54),
                   ),
@@ -166,9 +170,9 @@ class Overview2 extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, '/overview3');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 68, 91, 75),
+                    backgroundColor: const Color.fromARGB(255, 68, 91, 75),
                   ),
-                  child: Text(
+                  child: const Text(
                     'LANJUT',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -183,11 +187,11 @@ class Overview2 extends StatelessWidget {
 
   Widget _buildPageIndicator({required bool isActive}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      margin: const EdgeInsets.symmetric(horizontal: 4.0),
       height: 8.0,
       width: isActive ? 24.0 : 8.0,
       decoration: BoxDecoration(
-        color: isActive ? Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
+        color: isActive ? const Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
         borderRadius: BorderRadius.circular(4.0),
       ),
     );
@@ -195,6 +199,8 @@ class Overview2 extends StatelessWidget {
 }
 
 class Overview3 extends StatelessWidget {
+  const Overview3({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,10 +215,10 @@ class Overview3 extends StatelessWidget {
               'assets/img/food_plate.png',
               height: 200,
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             // Title
-            Text(
+            const Text(
               'Ayo mulai perjalanan diet sehatmu!',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -221,10 +227,10 @@ class Overview3 extends StatelessWidget {
                 color: Color.fromARGB(255, 68, 91, 75),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             // Description
-            Text(
+            const Text(
               'Bersama FOODPLAN, mencapai kesehatan lebih mudah dan menyenangkan.',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -232,7 +238,7 @@ class Overview3 extends StatelessWidget {
                 color: Colors.black54,
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
 
             // Page Indicator
             Row(
@@ -243,7 +249,7 @@ class Overview3 extends StatelessWidget {
                 _buildPageIndicator(isActive: true),
               ],
             ),
-            SizedBox(height: 100),
+            const SizedBox(height: 100),
 
             // Skip and Start Buttons
             Row(
@@ -253,7 +259,7 @@ class Overview3 extends StatelessWidget {
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/loginorregister');
                   },
-                  child: Text(
+                  child: const Text(
                     'LEWATI',
                     style: TextStyle(color: Colors.black54),
                   ),
@@ -263,9 +269,9 @@ class Overview3 extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, '/loginorregister');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 68, 91, 75),
+                    backgroundColor: const Color.fromARGB(255, 68, 91, 75),
                   ),
-                  child: Text(
+                  child: const Text(
                     'MULAI',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -280,11 +286,11 @@ class Overview3 extends StatelessWidget {
 
   Widget _buildPageIndicator({required bool isActive}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      margin: const EdgeInsets.symmetric(horizontal: 4.0),
       height: 8.0,
       width: isActive ? 24.0 : 8.0,
       decoration: BoxDecoration(
-        color: isActive ? Color.fromARGB(255, 68, 91, 75): Colors.grey[300],
+        color: isActive ? const Color.fromARGB(255, 68, 91, 75): Colors.grey[300],
         borderRadius: BorderRadius.circular(4.0),
       ),
     );

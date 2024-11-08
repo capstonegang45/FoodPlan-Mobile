@@ -12,26 +12,28 @@ import 'pages/home_page.dart';
 // import '/pages/home.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/splashscreen',
       routes: {
-        '/splashscreen': (context) => SplashScreen(),
-        '/overview1': (context) => Overview1(),
-        '/overview2': (context) => Overview2(),
-        '/overview3': (context) => Overview3(),
-        '/loginorregister': (context) => LoginOrRegister(),
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
-        '/validasi': (context) => ValidasiScreen(),
-        '/beranda': (context) => HomePage(),
-        '/deteksi': (context) => DeteksiPage(),
-        '/rencana': (context) => RencanaPage(),
+        '/splashscreen': (context) => const SplashScreen(),
+        '/overview1': (context) => const Overview1(),
+        '/overview2': (context) => const Overview2(),
+        '/overview3': (context) => const Overview3(),
+        '/loginorregister': (context) => const LoginOrRegister(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+        '/validasi': (context) => const ValidasiScreen(),
+        '/beranda': (context) => const HomePage(),
+        '/deteksi': (context) => const DeteksiPage(),
+        '/rencana': (context) => const RencanaPage(),
         // '/detail_rencana': (context) => DetailRencanaPage(),
       },
     );

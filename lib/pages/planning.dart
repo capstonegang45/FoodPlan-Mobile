@@ -3,7 +3,10 @@ import 'detail_planning.dart';
 import '../widgets/custom_bottom_nav.dart';
 
 class RencanaPage extends StatefulWidget {
+  const RencanaPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _RencanaPageState createState() => _RencanaPageState();
 }
 
@@ -51,9 +54,9 @@ class _RencanaPageState extends State<RencanaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FOODPLAN APP',
+        title: const Text('FOODPLAN APP',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: Color.fromARGB(255, 68, 91, 75),
+        backgroundColor: const Color.fromARGB(255, 68, 91, 75),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -63,7 +66,7 @@ class _RencanaPageState extends State<RencanaPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Filter buttons
-            SingleChildScrollView(
+            const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
@@ -91,7 +94,7 @@ class _RencanaPageState extends State<RencanaPage> {
               ),
             ),
 
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             // Diet Plan Cards
             Expanded(
@@ -133,7 +136,7 @@ class FilterButton extends StatelessWidget {
   final String label;
   final bool isSelected;
 
-  const FilterButton({required this.label, required this.isSelected});
+  const FilterButton({super.key, required this.label, required this.isSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +147,7 @@ class FilterButton extends StatelessWidget {
       onSelected: (selected) {
         // Handle selection logic if needed
       },
-      selectedColor: Color.fromARGB(255, 68, 91, 75),
+      selectedColor: const Color.fromARGB(255, 68, 91, 75),
       backgroundColor: Colors.grey[200],
     );
   }
@@ -156,7 +159,7 @@ class DietPlanCard extends StatelessWidget {
   final String imagePath;
   final VoidCallback onTap;
 
-  const DietPlanCard({
+  const DietPlanCard({super.key, 
     required this.title,
     required this.imagePath,
     required this.onTap,
@@ -188,15 +191,15 @@ class DietPlanCard extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(8.0),
-              margin: EdgeInsets.only(left: 10, bottom: 10),
+              padding: const EdgeInsets.all(8.0),
+              margin: const EdgeInsets.only(left: 10, bottom: 10),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 68, 91, 75),
+                color: const Color.fromARGB(255, 68, 91, 75),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,

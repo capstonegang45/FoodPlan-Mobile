@@ -4,7 +4,10 @@ import 'package:image_picker/image_picker.dart';
 import '../widgets/custom_bottom_nav.dart';
 
 class DeteksiPage extends StatefulWidget {
+  const DeteksiPage({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _DeteksiPageState createState() => _DeteksiPageState();
 }
 
@@ -69,8 +72,8 @@ class _DeteksiPageState extends State<DeteksiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 68, 91, 75),
-        title: Text(
+        backgroundColor: const Color.fromARGB(255, 68, 91, 75),
+        title: const Text(
           'FOODPLAN APP',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
@@ -98,7 +101,7 @@ class _DeteksiPageState extends State<DeteksiPage> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 // Camera and Gallery buttons
                 GestureDetector(
                   onTap: _openCamera,
@@ -107,12 +110,12 @@ class _DeteksiPageState extends State<DeteksiPage> {
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: EdgeInsets.all(16),
-                    child: Icon(Icons.camera_alt,
+                    padding: const EdgeInsets.all(16),
+                    child: const Icon(Icons.camera_alt,
                         size: 40, color: Color.fromARGB(255, 68, 91, 75)),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 GestureDetector(
                   onTap: _openGallery,
                   child: Container(
@@ -120,50 +123,50 @@ class _DeteksiPageState extends State<DeteksiPage> {
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: EdgeInsets.all(16),
-                    child: Icon(Icons.photo,
+                    padding: const EdgeInsets.all(16),
+                    child: const Icon(Icons.photo,
                         size: 40, color: Color.fromARGB(255, 68, 91, 75)),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
                 onPressed: _selectedImage != null ? _detectImage : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  foregroundColor: Color.fromARGB(255, 68, 91, 75),
+                  foregroundColor: const Color.fromARGB(255, 68, 91, 75),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(color: Colors.grey),
+                    side: const BorderSide(color: Colors.grey),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 140, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 12),
                 ),
-                child: Text(
+                child: const Text(
                   'Deteksi',
                   style: TextStyle(
                       fontSize: 16,
-                      color: const Color.fromARGB(255, 68, 91, 75)),
+                      color: Color.fromARGB(255, 68, 91, 75)),
                 ),
               ),
             ),
             if (_isDetected) ...[
-              SizedBox(height: 10),
-              Center(
+              const SizedBox(height: 10),
+              const Center(
                 child: Text(
                   "Deteksi Berhasil!",
                   style: TextStyle(color: Colors.green),
                 ),
               ),
-              SizedBox(height: 10),
-              Text(
+              const SizedBox(height: 10),
+              const Text(
                 "Hasil Deteksi",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text("1. $_detectionResult"),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 "Rekomendasi Makanan",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
@@ -172,12 +175,12 @@ class _DeteksiPageState extends State<DeteksiPage> {
                   itemCount: 5, // Misalnya menampilkan 5 rekomendasi
                   itemBuilder: (context, index) {
                     return Card(
-                      margin: EdgeInsets.symmetric(vertical: 8),
+                      margin: const EdgeInsets.symmetric(vertical: 8),
                       child: ListTile(
                         leading: Image.asset('assets/img/makan.png',
                             width: 50), 
-                        title: Text("Capcay Brokoli"),
-                        subtitle: Text(
+                        title: const Text("Capcay Brokoli"),
+                        subtitle: const Text(
                             "Sajian capcay yang biasanya hadir dengan beragam jenis sayuran juga bisa dibuat dengan satu macam..."),
                       ),
                     );

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class LoginOrRegister extends StatefulWidget {
+  const LoginOrRegister({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _LoginOrRegisterState createState() => _LoginOrRegisterState();
 }
 
@@ -20,17 +23,17 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
             // Ilustrasi Gambar
             Container(
               height: 200.0,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage('assets/img/illustration.png'),
                   fit: BoxFit.contain,
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
 
             // Judul
-            Text(
+            const Text(
               'FOODPLAN',
               style: TextStyle(
                 fontSize: 30.0,
@@ -38,10 +41,10 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                 color: Color.fromARGB(255, 68, 91, 75),
               ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
 
             // Deskripsi
-            Text(
+            const Text(
               'Temukan resep sehat, rencana diet, dan saran dari AI kami untuk mencapai tujuan dietmu. Mulai sekarang!',
               textAlign: TextAlign.start,
               style: TextStyle(
@@ -49,18 +52,9 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                 color: Color.fromARGB(255, 68, 91, 75),
               ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
 
-            // Placeholder teks tambahan
-            // Text(
-            //   'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when unknown printer took a galley',
-            //   textAlign: TextAlign.justify,
-            //   style: TextStyle(
-            //     fontSize: 14.0,
-            //     color: Colors.black,
-            //   ),
-            // ),
-            SizedBox(height: 30.0),
+            const SizedBox(height: 30.0),
 
             // Tombol Masuk dengan efek hover
             GestureDetector(
@@ -71,11 +65,11 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                 onHover: (event) => setState(() => _isHoveringMasuk = true),
                 onExit: (event) => setState(() => _isHoveringMasuk = false),
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: 1),
+                  duration: const Duration(milliseconds: 1),
                   height: 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: _isHoveringMasuk ? Colors.white : Color.fromARGB(255, 68, 91, 75),
+                    color: _isHoveringMasuk ? Colors.white : const Color.fromARGB(255, 68, 91, 75),
                     borderRadius: BorderRadius.circular(30.0),
                     border: Border.all(
                       color: Colors.green[900]!,
@@ -86,7 +80,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                       'MASUK',
                       style: TextStyle(
                         color:
-                            _isHoveringMasuk ? Color.fromARGB(255, 68, 91, 75) : Colors.white,
+                            _isHoveringMasuk ? const Color.fromARGB(255, 68, 91, 75) : Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -94,7 +88,7 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                 ),
               ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
 
             GestureDetector(
               onTap: () {
@@ -105,15 +99,15 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                 onHover: (event) => setState(() => _isHoveringDaftar = true),
                 onExit: (event) => setState(() => _isHoveringDaftar = false),
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: 100),
+                  duration: const Duration(milliseconds: 100),
                   height: 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: _isHoveringDaftar ? Color.fromARGB(255, 68, 91, 75) : Colors.white,
+                    color: _isHoveringDaftar ? const Color.fromARGB(255, 68, 91, 75) : Colors.white,
                     borderRadius: BorderRadius.circular(30.0),
                     border: Border.all(
                       color:
-                          _isHoveringDaftar ? Colors.white : Color.fromARGB(255, 68, 91, 75),
+                          _isHoveringDaftar ? Colors.white : const Color.fromARGB(255, 68, 91, 75),
                     ),
                   ),
                   child: Center(
