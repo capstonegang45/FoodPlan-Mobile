@@ -90,6 +90,10 @@ class _RencanaPageState extends State<RencanaPage> {
                   SizedBox(
                     width: 8,
                   ),
+                  FilterButton(label: 'Diet Dua Nyawa', isSelected: false),
+                  SizedBox(
+                    width: 8,
+                  ),
                 ],
               ),
             ),

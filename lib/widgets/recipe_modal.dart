@@ -8,6 +8,37 @@ class RecipeDetailModal extends StatelessWidget {
 
   const RecipeDetailModal({super.key, required this.product});
 
+  // Fungsi untuk membuat bar nutrisi dengan nilai yang disesuaikan
+  Widget _buildNutritionRow(String label, double value, double maxValue) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label),
+        Expanded(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+            height: 8,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: value / maxValue,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 68, 91, 75), // Warna progress bar
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+        ),
+        Text("${value.toInt()} g"),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Decode base64 image if available
@@ -74,53 +105,29 @@ class RecipeDetailModal extends StatelessWidget {
                         height: 300,
                         child: TabBarView(
                           children: [
-                            // Bahan
+                            // Tab Bahan
                             SingleChildScrollView(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(product.ingredients),
                               ),
                             ),
-                            // Informasi
+                            // Tab Informasi
                             SingleChildScrollView(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Background container for the progress bar
-                                    Container(
-                                      height: 8, // Tinggi bar progress
-                                      width: double.infinity, // Lebar penuh
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[
-                                            200], // Warna background progress bar
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Container(
-                                        height: 8, // Tinggi bar progress
-                                        width: product.carbohidrat /
-                                            100, // Skala sesuai dengan nilai karbohidrat
-                                        decoration: BoxDecoration(
-                                          color:
-                                              Colors.blue, // Warna bar progress
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                    ),
+                                    _buildNutritionRow("Karbohidrat", product.carbohidrat.toDouble(), 200.0),
                                     const SizedBox(height: 10),
-                                    Text(
-                                        "Karbohidrat: ${product.carbohidrat} g"),
+                                    _buildNutritionRow("Protein", product.protein.toDouble(), 100.0),
                                     const SizedBox(height: 10),
-                                    Text("Protein: ${product.protein} g"),
-                                    const SizedBox(height: 10),
-                                    Text("Lemak: ${product.fat} g"),
+                                    _buildNutritionRow("Lemak", product.fat.toDouble(), 150.0),
                                   ],
                                 ),
                               ),
                             ),
-
                             // Cara Membuat
                             SingleChildScrollView(
                               child: Padding(
