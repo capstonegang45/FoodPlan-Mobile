@@ -106,6 +106,7 @@ class _RencanaPageState extends State<RencanaPage> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
+
                   FilterButton(
                       label: 'Semua',
                       isSelected: selectedCategory == 'Semua',
@@ -135,6 +136,7 @@ class _RencanaPageState extends State<RencanaPage> {
                       label: 'Diet Dua Nyawa',
                       isSelected: selectedCategory == 'Diet Dua Nyawa',
                       onTap: _onCategorySelected),
+
                 ],
               ),
             ),

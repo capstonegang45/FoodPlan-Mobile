@@ -58,7 +58,8 @@ class DietCard extends StatelessWidget {
                   title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14,
+
+                    fontSize: 9,
                     color: Colors.white,
                   ),
                 ),

@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:food_plan/models/config.dart';
 
+
 Future<Map<String, dynamic>> login(String email, String password) async {
+
   final url = Uri.parse("$baseUrl/login");
 
   final loginData = {
@@ -14,8 +16,8 @@ Future<Map<String, dynamic>> login(String email, String password) async {
     // Mengatur headers untuk Content-Type 'application/json'
     final response = await http.post(
       url,
-      headers: {'Content-Type': 'application/json'}, // Set the correct content type
-      body: json.encode(loginData), // Encode the data as JSON
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(loginData),
     );
 
     if (response.statusCode == 200) {
