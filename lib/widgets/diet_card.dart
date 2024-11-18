@@ -21,7 +21,7 @@ class DietCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Only attempt to decode if the image_src is a valid base64 string
-    Uint8List bytes = image_src == 'No Images' 
+    Uint8List bytes = image_src == 'No Images'
         ? Uint8List(0) // If no image, provide an empty byte array
         : base64Decode(image_src.split(',').last);
 
@@ -34,13 +34,15 @@ class DietCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(15)),
               child: bytes.isEmpty
-                  ? const Icon(Icons.image, size: 50) // Show default icon if no image
+                  ? const Icon(Icons.image,
+                      size: 50) // Show default icon if no image
                   : Image.memory(
                       bytes,
                       fit: BoxFit.cover,
-                      height: 160,
+                      height: 140,
                       width: double.infinity,
                     ),
             ),
@@ -48,7 +50,8 @@ class DietCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 6.5),
               decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 92, 117, 87), // Dark green color
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
+                borderRadius:
+                    BorderRadius.vertical(bottom: Radius.circular(15)),
               ),
               child: Center(
                 child: Text(

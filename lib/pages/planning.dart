@@ -6,12 +6,67 @@ class RencanaPage extends StatefulWidget {
   const RencanaPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _RencanaPageState createState() => _RencanaPageState();
 }
 
 class _RencanaPageState extends State<RencanaPage> {
   int _selectedIndex = 2;
+  String selectedCategory = 'Semua';
+
+  final List<Map<String, dynamic>> dietPlans = [
+    {
+      'title': 'Diet Mediterania',
+      'imagePath': 'assets/img/balanced_meal.png',
+      'informasi':
+          'Diet Mediterania didasarkan pada pola makan tradisional dari negara-negara di sekitar Laut Mediterania. Diet ini kaya akan buah-buahan, sayuran, biji-bijian, minyak zaitun, dan protein dari ikan. Diet ini telah terbukti baik untuk kesehatan jantung dan menurunkan risiko penyakit kronis. Durasi: Bisa dilakukan dalam jangka panjang sebagai gaya hidup.Tingkat Kesulitan: Mudah hingga sedang (bahan mudah ditemukan, namun membutuhkan adaptasi pola makan baru). Komitmen: Tinggi, karena diet ini berfokus pada pola makan yang konsisten dan seimbang. Pilih Diet Ini Jika: Anda ingin menjaga kesehatan jantung, mengurangi risiko penyakit kronis, dan mengikuti diet seimbang tanpa terlalu banyak batasan. Apa yang Akan Dilakukan: Mengonsumsi banyak sayuran, buah, kacang-kacangan, minyak zaitun, serta mengurangi konsumsi daging merah dan makanan olahan.',
+      'rekomendasiMakanan':
+          'Sarapan: Greek yogurt dengan buah beri, kacang-kacangan, dan madu. Makan Siang: Salad sayuran dengan quinoa, zaitun, tomat, dan ayam panggang, dengan minyak zaitun sebagai dressing. Makan Malam: Ikan panggang dengan sayuran panggang seperti zucchini dan paprika, serta kentang.',
+      'aktivitas':
+          'Jalan kaki 30 menit sehari atau aktivitas ringan seperti yoga.',
+      'category': 'Diet Normal'
+    },
+    {
+      'title': 'Everyday Wellness Plan',
+      'imagePath': 'assets/img/wellness_plan.png',
+      'category': 'Diet Normal'
+    },
+    {
+      'title': 'Lean & Clean Diet',
+      'imagePath': 'assets/img/lean_clean.png',
+      'category': 'Diet Normal'
+    },
+    {
+      'title': 'SlimFit Program',
+      'imagePath': 'assets/img/slimfit.png',
+      'category': 'Diet Berat Badan'
+    },
+    {
+      'title': 'Mother\'s Glow Plan',
+      'imagePath': 'assets/img/mothers_glow.png',
+      'category': 'Diet Dua Nyawa'
+    },
+    {
+      'title': 'Nurture & Nourish',
+      'imagePath': 'assets/img/nurture_nourish.png',
+      'category': 'Diet Dua Nyawa'
+    },
+  ];
+
+  List<Map<String, dynamic>> get filteredDietPlans {
+    if (selectedCategory == 'Semua') {
+      return dietPlans;
+    } else {
+      return dietPlans
+          .where((plan) => plan['category'] == selectedCategory)
+          .toList();
+    }
+  }
+
+  void _onCategorySelected(String category) {
+    setState(() {
+      selectedCategory = category;
+    });
+  }
 
   void _onItemTapped(int index) {
     if (index != _selectedIndex) {
@@ -26,29 +81,10 @@ class _RencanaPageState extends State<RencanaPage> {
           Navigator.pushReplacementNamed(context, '/deteksi');
           break;
         case 2:
-          // Tetap di halaman Rencana
           break;
       }
     }
   }
-
-  final List<String> dietPlans = [
-    'Balanced Meal Plan',
-    'Everyday Wellness Plan',
-    'Lean & Clean Diet',
-    'SlimFit Program',
-    'Mother\'s Glow Plan',
-    'Nurture & Nourish',
-  ];
-
-  final List<String> dietImages = [
-    'assets/img/balanced_meal.png',
-    'assets/img/wellness_plan.png',
-    'assets/img/lean_clean.png',
-    'assets/img/slimfit.png',
-    'assets/img/mothers_glow.png',
-    'assets/img/nurture_nourish.png',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -66,52 +102,64 @@ class _RencanaPageState extends State<RencanaPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Filter buttons
-            const SingleChildScrollView(
+            SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  FilterButton(label: 'Semua', isSelected: true),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  FilterButton(label: 'Diet Normal', isSelected: false),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  FilterButton(label: 'Diet Berat Badan', isSelected: false),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  FilterButton(label: 'Diet Olahraga', isSelected: false),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  FilterButton(label: 'Diet Sakit', isSelected: false),
-                  SizedBox(
-                    width: 8,
-                  ),
+                  FilterButton(
+                      label: 'Semua',
+                      isSelected: selectedCategory == 'Semua',
+                      onTap: _onCategorySelected),
+                  const SizedBox(width: 8),
+                  FilterButton(
+                      label: 'Diet Normal',
+                      isSelected: selectedCategory == 'Diet Normal',
+                      onTap: _onCategorySelected),
+                  const SizedBox(width: 8),
+                  FilterButton(
+                      label: 'Diet Berat Badan',
+                      isSelected: selectedCategory == 'Diet Berat Badan',
+                      onTap: _onCategorySelected),
+                  const SizedBox(width: 8),
+                  FilterButton(
+                      label: 'Diet Olahraga',
+                      isSelected: selectedCategory == 'Diet Olahraga',
+                      onTap: _onCategorySelected),
+                  const SizedBox(width: 8),
+                  FilterButton(
+                      label: 'Diet Sakit',
+                      isSelected: selectedCategory == 'Diet Sakit',
+                      onTap: _onCategorySelected),
+                  const SizedBox(width: 8),
+                  FilterButton(
+                      label: 'Diet Dua Nyawa',
+                      isSelected: selectedCategory == 'Diet Dua Nyawa',
+                      onTap: _onCategorySelected),
                 ],
               ),
             ),
-
             const SizedBox(height: 10),
-
             // Diet Plan Cards
             Expanded(
               child: ListView.builder(
-                itemCount: dietPlans.length,
+                itemCount: filteredDietPlans.length,
                 itemBuilder: (context, index) {
+                  final plan = filteredDietPlans[index];
                   return DietPlanCard(
-                    title: dietPlans[index],
-                    imagePath: dietImages[index],
+                    title: plan['title'],
+                    imagePath: plan['imagePath'],
                     onTap: () {
                       // Navigate to DetailRencanaPage with title and imagePath
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetailRencanaPage(
-                            title: dietPlans[index],
-                            imagePath: dietImages[index],
+                            title: dietPlans[index]['title'],
+                            imagePath: dietPlans[index]['imagePath'],
+                            informasi: dietPlans[index]['informasi'],
+                            rekomendasiMakanan: dietPlans[index]
+                                ['rekomendasiMakanan'],
+                            aktivitas: dietPlans[index]['aktivitas'],
                           ),
                         ),
                       );
@@ -131,12 +179,18 @@ class _RencanaPageState extends State<RencanaPage> {
   }
 }
 
-// Widget for Filter Buttons
+// Updated FilterButton with onTap callback
 class FilterButton extends StatelessWidget {
   final String label;
   final bool isSelected;
+  final ValueChanged<String> onTap;
 
-  const FilterButton({super.key, required this.label, required this.isSelected});
+  const FilterButton({
+    super.key,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +198,8 @@ class FilterButton extends StatelessWidget {
       label: Text(label,
           style: TextStyle(color: isSelected ? Colors.white : Colors.black)),
       selected: isSelected,
-      onSelected: (selected) {
-        // Handle selection logic if needed
+      onSelected: (_) {
+        onTap(label);
       },
       selectedColor: const Color.fromARGB(255, 68, 91, 75),
       backgroundColor: Colors.grey[200],
@@ -153,13 +207,13 @@ class FilterButton extends StatelessWidget {
   }
 }
 
-// Widget for Diet Plan Card with onTap callback
 class DietPlanCard extends StatelessWidget {
   final String title;
   final String imagePath;
   final VoidCallback onTap;
 
-  const DietPlanCard({super.key, 
+  const DietPlanCard({
+    super.key,
     required this.title,
     required this.imagePath,
     required this.onTap,

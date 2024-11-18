@@ -3,8 +3,18 @@ import 'package:flutter/material.dart';
 class DetailRencanaPage extends StatelessWidget {
   final String title;
   final String imagePath;
+  final String informasi;
+  final String rekomendasiMakanan;
+  final String aktivitas;
 
-  const DetailRencanaPage({super.key, required this.title, required this.imagePath});
+  const DetailRencanaPage({
+    super.key,
+    required this.title,
+    required this.imagePath,
+    required this.informasi,
+    required this.rekomendasiMakanan,
+    required this.aktivitas,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,11 +22,9 @@ class DetailRencanaPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 68, 91, 75),
         title: const Text("Detail Rencana"),
-        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
       ),
       body: Column(
         children: [
-          // Image with title overlay
           Stack(
             alignment: Alignment.bottomLeft,
             children: [
@@ -44,8 +52,6 @@ class DetailRencanaPage extends StatelessWidget {
               ),
             ],
           ),
-
-          // TabBar and TabBarView for content
           Expanded(
             child: DefaultTabController(
               length: 3,
@@ -55,10 +61,6 @@ class DetailRencanaPage extends StatelessWidget {
                     indicatorColor: Color.fromARGB(255, 68, 91, 75),
                     labelColor: Color.fromARGB(255, 68, 91, 75),
                     unselectedLabelColor: Colors.grey,
-                    labelStyle:
-                        TextStyle(fontSize: 12), // Adjust font size as needed
-                    labelPadding:
-                        EdgeInsets.symmetric(horizontal: 4.0), // Adjust padding
                     tabs: [
                       Tab(text: 'Informasi Rencana'),
                       Tab(text: 'Rekomendasi Makanan'),
@@ -68,90 +70,23 @@ class DetailRencanaPage extends StatelessWidget {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        // Content for Informasi Rencana tab
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Pelajari bagaimana merencanakan dan menjalankan pola makan seimbang dengan fokus pada makro dan mikro nutrisi. Rencana ini akan membantu Anda mencapai kesehatan optimal dan meningkatkan performa fisik secara berkelanjutan. Dari kontrol porsi hingga kombinasi makanan yang tepat, Anda akan belajar cara menjaga keseimbangan yang mendukung gaya hidup sehat.',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[700]),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  'Konsultasikan dengan dokter Anda sebelum memulai rencana ini dengan aman. Kami tidak bertanggung jawab atas cedera atau masalah kesehatan yang mungkin terjadi selama menjalankan program ini.',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[700]),
-                                ),
-                                const SizedBox(height: 10),
-                                Text(
-                                  'Durasi: 28 hari\nTingkat Kesulitan: Pemula\nKomitmen: Harian',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[700]),
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                  'Pilih rencana ini jika:',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey[800],
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  '• Anda baru memulai pola makan seimbang dan membutuhkan panduan.\n'
-                                  '• Anda ingin meningkatkan kualitas makanan sehari-hari dengan cara yang mudah diikuti.\n'
-                                  '• Anda ingin mencapai tujuan kesehatan atau kebugaran tertentu dengan pola makan yang teratur.',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[700]),
-                                ),
-                                const SizedBox(height: 20),
-                                Text(
-                                  'Apa yang akan Anda lakukan:',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.grey[800],
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  '• Belajar menyusun menu makanan yang seimbang sesuai kebutuhan nutrisi Anda.\n'
-                                  '• Mengatur porsi makanan untuk mencapai tujuan kesehatan Anda.\n'
-                                  '• Memahami pentingnya variasi makanan yang kaya akan nutrisi dalam setiap kali makan.',
-                                  style: TextStyle(
-                                      fontSize: 14, color: Colors.grey[700]),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-
-                        // Content for Rekomendasi Makanan tab
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SingleChildScrollView(
-                            child: Text(
-                              'Rekomendasi makanan yang cocok untuk diet ini.',
+                          child: Text(informasi,
                               style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[700]),
-                            ),
-                          ),
+                                  fontSize: 14, color: Colors.grey[700])),
                         ),
-                        // Content for Aktivitas tab
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: SingleChildScrollView(
-                            child: Text(
-                              'Aktivitas atau olahraga yang direkomendasikan untuk mendukung diet ini.',
+                          child: Text(rekomendasiMakanan,
                               style: TextStyle(
-                                  fontSize: 14, color: Colors.grey[700]),
-                            ),
-                          ),
+                                  fontSize: 14, color: Colors.grey[700])),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(aktivitas,
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey[700])),
                         ),
                       ],
                     ),

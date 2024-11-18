@@ -92,7 +92,8 @@ class Overview1 extends StatelessWidget {
       height: 8.0,
       width: isActive ? 24.0 : 8.0,
       decoration: BoxDecoration(
-        color: isActive ? const Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
+        color:
+            isActive ? const Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
         borderRadius: BorderRadius.circular(4.0),
       ),
     );
@@ -191,7 +192,8 @@ class Overview2 extends StatelessWidget {
       height: 8.0,
       width: isActive ? 24.0 : 8.0,
       decoration: BoxDecoration(
-        color: isActive ? const Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
+        color:
+            isActive ? const Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
         borderRadius: BorderRadius.circular(4.0),
       ),
     );
@@ -290,7 +292,8 @@ class Overview3 extends StatelessWidget {
       height: 8.0,
       width: isActive ? 24.0 : 8.0,
       decoration: BoxDecoration(
-        color: isActive ? const Color.fromARGB(255, 68, 91, 75): Colors.grey[300],
+        color:
+            isActive ? const Color.fromARGB(255, 68, 91, 75) : Colors.grey[300],
         borderRadius: BorderRadius.circular(4.0),
       ),
     );

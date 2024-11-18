@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
                 }).toList(),
               ),
             ),
-
+            
             // Rekomendasi Diet Normal section
             const Padding(
               padding: EdgeInsets.all(16.0),
