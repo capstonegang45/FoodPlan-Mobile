@@ -5,7 +5,7 @@ class ProfileWidget extends StatelessWidget {
   final String email;
   final String imageUrl;
 
-  ProfileWidget({
+  const ProfileWidget({super.key, 
     required this.name,
     required this.email,
     required this.imageUrl,
@@ -25,13 +25,13 @@ class ProfileWidget extends StatelessWidget {
                 backgroundImage: NetworkImage(imageUrl),
                 backgroundColor: Colors.grey.shade300,
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -48,7 +48,7 @@ class ProfileWidget extends StatelessWidget {
             ],
           ),
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             onPressed: () {
               // Aksi saat tombol settings ditekan
             },

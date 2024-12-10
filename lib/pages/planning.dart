@@ -165,6 +165,13 @@ class _RencanaPageState extends State<RencanaPage> {
                                                       item['category_id'],
                                                   'images_src':
                                                       item['images_src'],
+                                                  'ingredients': item['ingredients'],
+                                                  'steps': item['steps'],
+                                                  'fat': item['fat'],
+                                                  'carbohidrat': item['carbohidrat'],
+                                                  'protein': item['protein'],
+                                                  'categoryId': item['category_id'],
+                                                  'categoryName': item['category_name'],
                                                 })),
                                     "Siang": List<Map<String, dynamic>>.from(
                                         (plan['rekomendasiMakanan']['Siang'] as List)
@@ -177,6 +184,13 @@ class _RencanaPageState extends State<RencanaPage> {
                                                       item['category_id'],
                                                   'images_src':
                                                       item['images_src'],
+                                                  'ingredients': item['ingredients'],
+                                                  'steps': item['steps'],
+                                                  'fat': item['fat'],
+                                                  'carbohidrat': item['carbohidrat'],
+                                                  'protein': item['protein'],
+                                                  'categoryId': item['category_id'],
+                                                  'categoryName': item['category_name'],
                                                 })),
                                     "Malam": List<Map<String, dynamic>>.from(
                                         (plan['rekomendasiMakanan']['Malam'] as List)
@@ -189,6 +203,13 @@ class _RencanaPageState extends State<RencanaPage> {
                                                       item['category_id'],
                                                   'images_src':
                                                       item['images_src'],
+                                                  'ingredients': item['ingredients'],
+                                                  'steps': item['steps'],
+                                                  'fat': item['fat'],
+                                                  'carbohidrat': item['carbohidrat'],
+                                                  'protein': item['protein'],
+                                                  'categoryId': item['category_id'],
+                                                  'categoryName': item['category_name'],
                                                 })),
                                   },
                                 ),

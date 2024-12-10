@@ -17,7 +17,6 @@ class ValidasiHelper {
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    print(token);
     if (token == null || token.isEmpty) {
       throw Exception('Token tidak ditemukan atau kosong');
     }

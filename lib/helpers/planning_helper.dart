@@ -13,7 +13,6 @@ class PlanningHelper {
     }
 
     final uri = Uri.parse('$baseUrl/planning-page');
-    print('Request URL: $uri');
 
     final response = await http.get(
       uri,
@@ -23,14 +22,11 @@ class PlanningHelper {
       },
     );
 
-    print('Status Code: ${response.statusCode}');
-    print('Response Body: ${response.body}');
 
     if (response.statusCode == 200) {
       try {
         return jsonDecode(response.body);
       } catch (e) {
-        print('Error parsing JSON: $e');
         throw Exception('Failed to parse response');
       }
     } else if (response.statusCode == 401) {

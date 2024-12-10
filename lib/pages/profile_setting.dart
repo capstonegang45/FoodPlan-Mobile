@@ -90,7 +90,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                             ? FileImage(_profileImage!)
                             : (bytes.isNotEmpty
                                 ? MemoryImage(bytes)
-                                : AssetImage('assets/img/icons8.png')
+                                : const AssetImage('assets/img/icons8.png')
                                     as ImageProvider),
                       ),
                     ),

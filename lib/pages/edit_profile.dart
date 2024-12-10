@@ -39,7 +39,7 @@ class _EditProfileState extends State<EditProfile> {
                 labelText: 'Nama Lengkap', 
                 hintText: 'Masukkan Nama Lengkap'
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               // Username
               customTextField(
@@ -47,7 +47,7 @@ class _EditProfileState extends State<EditProfile> {
                 labelText: 'Username', 
                 hintText: 'Masukkan Username'
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               // Email
               customTextField(
@@ -55,7 +55,7 @@ class _EditProfileState extends State<EditProfile> {
                 labelText: 'Email', 
                 hintText: 'Masukkan Email'
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               // Password
               customTextField(
@@ -74,7 +74,7 @@ class _EditProfileState extends State<EditProfile> {
                   },
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               // Usia
               customTextField(
@@ -83,7 +83,7 @@ class _EditProfileState extends State<EditProfile> {
                 hintText: 'Masukkan Usia',
                 keyboardType: TextInputType.number
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               // Tinggi Badan
               customTextField(
@@ -92,7 +92,7 @@ class _EditProfileState extends State<EditProfile> {
                 hintText: 'Masukkan Tinggi Badan',
                 keyboardType: TextInputType.number
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               // Berat Badan
               customTextField(
@@ -101,7 +101,7 @@ class _EditProfileState extends State<EditProfile> {
                 hintText: 'Masukkan Berat Badan',
                 keyboardType: TextInputType.number
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               // Tipe Diet
               customTextField(
@@ -109,24 +109,24 @@ class _EditProfileState extends State<EditProfile> {
                 labelText: 'Tipe Diet', 
                 hintText: 'Masukkan Tipe Diet'
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
 
               customTextField(
                 controller: _riwayatController, 
                 labelText: 'Riwayat', 
                 hintText: 'Masukkan Riwayat Penyakit'
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Simpan Button
               ElevatedButton(
                 onPressed: () {
                   // Logika untuk menyimpan data
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('Profil berhasil disimpan!'),
                   ));
                 },
-                child: Text('Simpan'),
+                child: const Text('Simpan'),
               ),
             ],
           ),

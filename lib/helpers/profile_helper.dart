@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -45,7 +47,6 @@ Future<void> uploadProfileImage(File image) async {
     // Konversi gambar menjadi string base64
     String base64Image = base64Encode(bytes);
 
-    print(base64Image);
 
     // Kirim permintaan POST ke backend Flask
     var response = await http.post(
@@ -61,12 +62,11 @@ Future<void> uploadProfileImage(File image) async {
     );
 
     if (response.statusCode == 200) {
-      print('Image uploaded successfully!');
     } else {
-      print('Failed to upload image.');
     }
+  // ignore: duplicate_ignore
+  // ignore: empty_catches
   } catch (e) {
-    print('Error uploading image: $e');
   }
 }
 
@@ -94,12 +94,9 @@ Future<void> updateProfileField(String field, dynamic value) async {
     );
 
     if (response.statusCode == 200) {
-      print('Data berhasil diperbarui: ${response.body}');
     } else {
-      print('Gagal memperbarui data: ${response.body}');
       throw Exception('Error: ${response.statusCode}');
     }
   } catch (e) {
-    print('Error saat mengupdate data: $e');
   }
 }
