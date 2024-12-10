@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_plan/pages/deteksi.dart';
+import 'package:food_plan/pages/edit_profile.dart';
+import 'package:food_plan/pages/forgot_password.dart';
+import 'package:food_plan/pages/full_resep.dart';
 import 'package:food_plan/pages/planning.dart';
+import 'package:food_plan/pages/profile_setting.dart';
 import 'package:food_plan/pages/register.dart';
 import 'package:food_plan/pages/validasi.dart';
 import '/pages/login.dart';
@@ -34,6 +38,11 @@ class MyApp extends StatelessWidget {
         '/beranda': (context) => const HomePage(),
         '/deteksi': (context) => const DeteksiPage(),
         '/rencana': (context) => const RencanaPage(),
+        '/fullresep': (context) => const FullResep(),
+        '/lupapassword': (context) => const ForgotPasswordPage(),
+        '/editprofile': (context) => const EditProfile(),
+        '/profile': (context) => const ProfileSettingsPage(),
+
         // '/detail_rencana': (context) => DetailRencanaPage(),
       },
     );

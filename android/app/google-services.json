@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "705335153334",
+    "project_id": "tranquil-gasket-442909-i2",
+    "storage_bucket": "tranquil-gasket-442909-i2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705335153334:android:d36a2ba80827d40ec8cc17",
+        "android_client_info": {
+          "package_name": "com.example.food_plan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705335153334-mnop4njgqkaf2j6ltbbgf1d1u1todl5p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.food_plan",
+            "certificate_hash": "68ff6fa9465a75e706a56bfc754c04db853cb0ee"
+          }
+        },
+        {
+          "client_id": "705335153334-83c2l11vvpvii6l24si8sbam5gi9ueed.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsLritoG1imuu7cjjDd4UymPRV_gVCzcc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705335153334-83c2l11vvpvii6l24si8sbam5gi9ueed.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

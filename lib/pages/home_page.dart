@@ -1,29 +1,31 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
 import 'package:food_plan/helpers/beranda_helper.dart';
-import 'package:food_plan/widgets/recipe_modal.dart';
 import 'package:food_plan/models/produk.dart';
-import 'package:food_plan/pages/profile_setting.dart';
 import 'package:food_plan/widgets/custom_bottom_nav.dart';
+import 'package:food_plan/widgets/custom_btn.dart';
+import 'package:food_plan/widgets/produk_list.dart';
+import 'package:food_plan/widgets/recipe_modal.dart';
 import 'package:food_plan/widgets/diet_card.dart';
+import 'package:food_plan/models/user.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  late Future<List<Product>> futureProducts;
+  late Future<Map<String, dynamic>> futureData;
 
   @override
   void initState() {
     super.initState();
-    futureProducts =
-        fetchProducts(); // Memanggil fungsi untuk mengambil data produk dari API
+    futureData =
+        getUserProfileAndProducts(); // Mengambil data dengan userId = 1
   }
 
   void _onItemTapped(int index) {
@@ -57,39 +59,55 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/img/icons8.png'),
-            ),
-            SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        title: FutureBuilder<Map<String, dynamic>>(
+          future: futureData,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return const Text('Error loading data');
+            } else if (!snapshot.hasData) {
+              return const Text('No data available');
+            }
+
+            final user =
+                User.fromJson(snapshot.data!['user']); // Ambil data user
+            // Ambil data produk
+
+            final avatarBytes = base64Decode(user.avatar!.split(',')[1]);
+
+            return Row(
               children: [
-                Text(
-                  'Ilham Hatta Manggala',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                CircleAvatar(
+                  backgroundImage: MemoryImage(avatarBytes),
                 ),
-                Text(
-                  'admin123@gmail.com',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.nama,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(
+                      user.email,
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
+            );
+          },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.black),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProfileSettingsPage()));
+              Navigator.pushReplacementNamed(context, '/profile');
             },
           ),
         ],
@@ -98,7 +116,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Carousel Banner
+            // Carousel Slider
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: CarouselSlider(
@@ -129,37 +147,42 @@ class _HomePageState extends State<HomePage> {
                 }).toList(),
               ),
             ),
-            
-            // Rekomendasi Diet Normal section
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'REKOMENDASI DIET NORMAL',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: FutureBuilder<List<Product>>(
-                  future: futureProducts,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return const Center(
-                          child: Text('Error loading products'));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('No products available'));
-                    }
+            // Menampilkan Produk
+            FutureBuilder<Map<String, dynamic>>(
+              future: futureData,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error loading products'));
+                } else if (!snapshot.hasData) {
+                  return const Center(child: Text('No products available'));
+                }
 
-                    return GridView.builder(
-                      shrinkWrap:
-                          true, // Membuat GridView menyesuaikan tinggi dengan jumlah item
-                      physics:
-                          const NeverScrollableScrollPhysics(), // Tidak bisa di-scroll sendiri
+                final matchingProducts = List<Map<String, dynamic>>.from(
+                  snapshot.data!['products']['matching_products'] ?? [],
+                ).map((e) => Product.fromJson(e)).toList();
+
+                final otherProducts = List<Map<String, dynamic>>.from(
+                  snapshot.data!['products']['other_products'] ?? [],
+                ).map((e) => Product.fromJson(e)).toList();
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        matchingProducts.isNotEmpty
+                            ? 'REKOMENDASI RESEP ${matchingProducts[0].categoryName.toUpperCase()}'
+                            : 'Rekomendasi Resep',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -167,13 +190,13 @@ class _HomePageState extends State<HomePage> {
                         crossAxisSpacing: 12,
                         mainAxisSpacing: 12,
                       ),
-                      itemCount: snapshot.data!.length,
+                      itemCount: matchingProducts.length,
                       itemBuilder: (context, index) {
-                        final product = snapshot.data![index];
+                        final product = matchingProducts[index];
+                        print(product);
                         return DietCard(
                           title: product.title,
-                          description: product.description,
-                          image_src: product.image_src ?? 'No Images',
+                          image_src: product.image_src,
                           onTap: () {
                             showModalBottomSheet(
                               context: context,
@@ -185,67 +208,48 @@ class _HomePageState extends State<HomePage> {
                           },
                         );
                       },
-                    );
-                  },
-                )),
-
-            const SizedBox(height: 30.0),
-
-            // Rekomendasi Diet Lainnya section
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                "REKOMENDASI DIET LAINNYA",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
                     ),
-                    elevation: 4,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image.asset(
-                              'assets/img/makan.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "CAPCAY BROKOLI",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                "Sajian capcay yang biasanya hadir dengan beragam jenis sayuran juga bisa dibuat dengan satu macam...",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'REKOMENDASI DIET LAINNYA',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount:
+                          otherProducts.length > 10 ? 10 : otherProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = otherProducts[index];
+                        return ProductListItem(
+                          title: product.title,
+                          description: product.description,
+                          imageSrc: product.image_src,
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) =>
+                                  RecipeDetailModal(product: product),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: CustomButton(
+                        label: 'Lihat Resep Lainnya',
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/fullresep');
+                        },
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

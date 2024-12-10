@@ -8,8 +8,9 @@ class Product {
   final int fat;
   final int protein;
   final String description;
+  final String categoryName;
   // ignore: non_constant_identifier_names
-  final String? image_src; // Bisa null jika tidak ada gambar
+  final String image_src; // Bisa null jika tidak ada gambar
 
   // Constructor
   Product({
@@ -22,8 +23,9 @@ class Product {
     required this.fat,
     required this.protein,
     required this.description,
+    required this.categoryName,
     // ignore: non_constant_identifier_names
-    this.image_src,
+    required this.image_src,
   });
 
   // Factory method untuk membuat objek dari JSON
@@ -32,6 +34,7 @@ class Product {
       id: json['id'],
       title: json['title'],
       categoryId: json['category_id'],
+      categoryName: json['category_name'],
       ingredients: json['ingredients'],
       steps: json['steps'],
       carbohidrat: json['carbohidrat'],
@@ -47,7 +50,8 @@ class Product {
     return {
       'id': id,
       'title': title,
-      'categoryId': categoryId,
+      'category_id': categoryId,
+      'category_name': categoryName,
       'ingredients': ingredients,
       'steps': steps,
       'carbohidrat': carbohidrat,

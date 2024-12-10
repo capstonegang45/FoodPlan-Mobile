@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_plan/helpers/planning_helper.dart';
 import 'detail_planning.dart';
 import '../widgets/custom_bottom_nav.dart';
 
@@ -6,58 +7,29 @@ class RencanaPage extends StatefulWidget {
   const RencanaPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _RencanaPageState createState() => _RencanaPageState();
 }
 
 class _RencanaPageState extends State<RencanaPage> {
   int _selectedIndex = 2;
   String selectedCategory = 'Semua';
+  late Future<List<dynamic>> _plansFuture;
 
-  final List<Map<String, dynamic>> dietPlans = [
-    {
-      'title': 'Diet Mediterania',
-      'imagePath': 'assets/img/balanced_meal.png',
-      'informasi':
-          'Diet Mediterania didasarkan pada pola makan tradisional dari negara-negara di sekitar Laut Mediterania. Diet ini kaya akan buah-buahan, sayuran, biji-bijian, minyak zaitun, dan protein dari ikan. Diet ini telah terbukti baik untuk kesehatan jantung dan menurunkan risiko penyakit kronis. Durasi: Bisa dilakukan dalam jangka panjang sebagai gaya hidup.Tingkat Kesulitan: Mudah hingga sedang (bahan mudah ditemukan, namun membutuhkan adaptasi pola makan baru). Komitmen: Tinggi, karena diet ini berfokus pada pola makan yang konsisten dan seimbang. Pilih Diet Ini Jika: Anda ingin menjaga kesehatan jantung, mengurangi risiko penyakit kronis, dan mengikuti diet seimbang tanpa terlalu banyak batasan. Apa yang Akan Dilakukan: Mengonsumsi banyak sayuran, buah, kacang-kacangan, minyak zaitun, serta mengurangi konsumsi daging merah dan makanan olahan.',
-      'rekomendasiMakanan':
-          'Sarapan: Greek yogurt dengan buah beri, kacang-kacangan, dan madu. Makan Siang: Salad sayuran dengan quinoa, zaitun, tomat, dan ayam panggang, dengan minyak zaitun sebagai dressing. Makan Malam: Ikan panggang dengan sayuran panggang seperti zucchini dan paprika, serta kentang.',
-      'aktivitas':
-          'Jalan kaki 30 menit sehari atau aktivitas ringan seperti yoga.',
-      'category': 'Diet Normal'
-    },
-    {
-      'title': 'Everyday Wellness Plan',
-      'imagePath': 'assets/img/wellness_plan.png',
-      'category': 'Diet Normal'
-    },
-    {
-      'title': 'Lean & Clean Diet',
-      'imagePath': 'assets/img/lean_clean.png',
-      'category': 'Diet Normal'
-    },
-    {
-      'title': 'SlimFit Program',
-      'imagePath': 'assets/img/slimfit.png',
-      'category': 'Diet Berat Badan'
-    },
-    {
-      'title': 'Mother\'s Glow Plan',
-      'imagePath': 'assets/img/mothers_glow.png',
-      'category': 'Diet Dua Nyawa'
-    },
-    {
-      'title': 'Nurture & Nourish',
-      'imagePath': 'assets/img/nurture_nourish.png',
-      'category': 'Diet Dua Nyawa'
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    // Fetch data using PlanningHelper
+    _plansFuture = PlanningHelper().fetchPlans();
+  }
 
-  List<Map<String, dynamic>> get filteredDietPlans {
+  // Filtering plans based on category
+  List<dynamic> _filterPlans(List<dynamic> plans) {
     if (selectedCategory == 'Semua') {
-      return dietPlans;
+      return plans;
     } else {
-      return dietPlans
-          .where((plan) => plan['category'] == selectedCategory)
+      return plans
+          .where((plan) => plan['categoryName'] == selectedCategory)
           .toList();
     }
   }
@@ -96,82 +68,142 @@ class _RencanaPageState extends State<RencanaPage> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Filter buttons
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
+      body: FutureBuilder<List<dynamic>>(
+        future: _plansFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Tidak ada data tersedia.'));
+          } else {
+            // Filter plans
+            final filteredPlans = _filterPlans(snapshot.data!);
+
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  FilterButton(
-                      label: 'Semua',
-                      isSelected: selectedCategory == 'Semua',
-                      onTap: _onCategorySelected),
-                  const SizedBox(width: 8),
-                  FilterButton(
-                      label: 'Diet Normal',
-                      isSelected: selectedCategory == 'Diet Normal',
-                      onTap: _onCategorySelected),
-                  const SizedBox(width: 8),
-                  FilterButton(
-                      label: 'Diet Berat Badan',
-                      isSelected: selectedCategory == 'Diet Berat Badan',
-                      onTap: _onCategorySelected),
-                  const SizedBox(width: 8),
-                  FilterButton(
-                      label: 'Diet Olahraga',
-                      isSelected: selectedCategory == 'Diet Olahraga',
-                      onTap: _onCategorySelected),
-                  const SizedBox(width: 8),
-                  FilterButton(
-                      label: 'Diet Sakit',
-                      isSelected: selectedCategory == 'Diet Sakit',
-                      onTap: _onCategorySelected),
-                  const SizedBox(width: 8),
-                  FilterButton(
-                      label: 'Diet Dua Nyawa',
-                      isSelected: selectedCategory == 'Diet Dua Nyawa',
-                      onTap: _onCategorySelected),
-
+                  // Filter buttons
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        FilterButton(
+                            label: 'Semua',
+                            isSelected: selectedCategory == 'Semua',
+                            onTap: _onCategorySelected),
+                        const SizedBox(width: 8),
+                        FilterButton(
+                            label: 'Diet Normal',
+                            isSelected: selectedCategory == 'Diet Normal',
+                            onTap: _onCategorySelected),
+                        const SizedBox(width: 8),
+                        FilterButton(
+                            label: 'Diet Berat Badan',
+                            isSelected: selectedCategory == 'Diet Berat Badan',
+                            onTap: _onCategorySelected),
+                        const SizedBox(width: 8),
+                        FilterButton(
+                            label: 'Diet Sport',
+                            isSelected: selectedCategory == 'Diet Sport',
+                            onTap: _onCategorySelected),
+                        const SizedBox(width: 8),
+                        FilterButton(
+                            label: 'Diet Khusus',
+                            isSelected: selectedCategory == 'Diet Khusus',
+                            onTap: _onCategorySelected),
+                        const SizedBox(width: 8),
+                        FilterButton(
+                            label: 'Diet 2 Nyawa',
+                            isSelected: selectedCategory == 'Diet 2 Nyawa',
+                            onTap: _onCategorySelected),
+                        // Tambahkan kategori lainnya sesuai kebutuhan
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  // Diet Plan Cards
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: filteredPlans.length,
+                      itemBuilder: (context, index) {
+                        final plan = filteredPlans[index];
+                        return DietPlanCard(
+                          title: plan['nama'],
+                          imagePath: plan['image'] ?? 'assets/img/slimfit.png',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailRencanaPage(
+                                  title: plan['nama'],
+                                  imagePath:
+                                      plan['image'] ?? 'assets/img/slimfit.png',
+                                  aktivitas: (plan['aktivitas'] as List)
+                                      .map((item) => item['aktivitas'])
+                                      .join(', '),
+                                  informasi: [
+                                    plan['description'],
+                                    plan['details'][0]['kesulitan'],
+                                    plan['details'][0]['durasi'],
+                                    plan['details'][0]['komitmen'],
+                                    plan['details'][0]['pilih'],
+                                    plan['details'][0]['lakukan'],
+                                  ],
+                                  rekomendasiMakanan: {
+                                    "Pagi": List<Map<String, dynamic>>.from(
+                                        (plan['rekomendasiMakanan']['Pagi'] as List)
+                                            .map((item) => {
+                                                  'id': item['id'],
+                                                  'title': item['title'],
+                                                  'description':
+                                                      item['description'],
+                                                  'category_id':
+                                                      item['category_id'],
+                                                  'images_src':
+                                                      item['images_src'],
+                                                })),
+                                    "Siang": List<Map<String, dynamic>>.from(
+                                        (plan['rekomendasiMakanan']['Siang'] as List)
+                                            .map((item) => {
+                                                  'id': item['id'],
+                                                  'title': item['title'],
+                                                  'description':
+                                                      item['description'],
+                                                  'category_id':
+                                                      item['category_id'],
+                                                  'images_src':
+                                                      item['images_src'],
+                                                })),
+                                    "Malam": List<Map<String, dynamic>>.from(
+                                        (plan['rekomendasiMakanan']['Malam'] as List)
+                                            .map((item) => {
+                                                  'id': item['id'],
+                                                  'title': item['title'],
+                                                  'description':
+                                                      item['description'],
+                                                  'category_id':
+                                                      item['category_id'],
+                                                  'images_src':
+                                                      item['images_src'],
+                                                })),
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
-            ),
-            const SizedBox(height: 10),
-            // Diet Plan Cards
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredDietPlans.length,
-                itemBuilder: (context, index) {
-                  final plan = filteredDietPlans[index];
-                  return DietPlanCard(
-                    title: plan['title'],
-                    imagePath: plan['imagePath'],
-                    onTap: () {
-                      // Navigate to DetailRencanaPage with title and imagePath
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailRencanaPage(
-                            title: dietPlans[index]['title'],
-                            imagePath: dietPlans[index]['imagePath'],
-                            informasi: dietPlans[index]['informasi'],
-                            rekomendasiMakanan: dietPlans[index]
-                                ['rekomendasiMakanan'],
-                            aktivitas: dietPlans[index]['aktivitas'],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,

@@ -1,19 +1,32 @@
 import 'dart:convert';
-import 'package:food_plan/models/produk.dart';
 import 'package:http/http.dart' as http;
 import 'package:food_plan/models/config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-Future<List<Product>> fetchProducts() async {
-  final response = await http.get(
-    Uri.parse('$baseUrl/produk-page'),
-    headers: {'Accept': 'application/json'},
-  );
+Future<Map<String, dynamic>> getUserProfileAndProducts() async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
 
-  if (response.statusCode == 200) {
-    // print(response.body);
-    final List<dynamic> data = jsonDecode(response.body);
-    return data.map((json) => Product.fromJson(json)).toList();
-  } else {
-    throw Exception('Gagal mengambil produk');
+    if (token == null || token.isEmpty) {
+      throw Exception('Token tidak ditemukan');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/beranda'),
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Parsing JSON response
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load data');
+    }
+  } catch (e) {
+    throw Exception('Error: $e');
   }
 }

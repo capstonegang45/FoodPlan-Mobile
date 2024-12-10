@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class DietCard extends StatelessWidget {
   final String title;
-  final String description;
   // ignore: non_constant_identifier_names
   final String image_src;
   final VoidCallback onTap;
@@ -12,7 +11,6 @@ class DietCard extends StatelessWidget {
   const DietCard({
     super.key,
     required this.title,
-    required this.description,
     // ignore: non_constant_identifier_names
     required this.image_src,
     required this.onTap,
@@ -20,9 +18,9 @@ class DietCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Only attempt to decode if the image_src is a valid base64 string
+    // Decode base64 image if valid
     Uint8List bytes = image_src == 'No Images'
-        ? Uint8List(0) // If no image, provide an empty byte array
+        ? Uint8List(0) // If no image, provide empty byte array
         : base64Decode(image_src.split(',').last);
 
     return GestureDetector(
@@ -34,32 +32,31 @@ class DietCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(15)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
               child: bytes.isEmpty
-                  ? const Icon(Icons.image,
-                      size: 50) // Show default icon if no image
+                  ? const Icon(Icons.image, size: 50) // Default icon
                   : Image.memory(
                       bytes,
                       fit: BoxFit.cover,
-                      height: 140,
+                      height: 172.7,
                       width: double.infinity,
                     ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 6.5),
+              padding: const EdgeInsets.symmetric(vertical: 8.0), // Adjusted padding
               decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 92, 117, 87), // Dark green color
-                borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(15)),
+                color: Color.fromARGB(255, 34, 70, 34), // Dark green color
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
               ),
-              child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0), // Added horizontal padding
                 child: Text(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis, // Ellipsis for long title
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-
-                    fontSize: 9,
+                    fontSize: 16, // Increased font size for better readability
                     color: Colors.white,
                   ),
                 ),

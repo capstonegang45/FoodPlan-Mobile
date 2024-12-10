@@ -3,28 +3,49 @@ import 'dart:io';
 import 'package:food_plan/models/config.dart';
 import 'package:http/http.dart' as http;
 
-Future<Map<String, dynamic>> uploadImage(File image) async {
-  final url = Uri.parse('$baseUrl/predict'); // Correct URL definition
-  
+Future<Map<String, dynamic>> uploadImages(List<File> images) async {
+  final url = Uri.parse('$baseUrl/predict'); // Base URL dari API
+
   try {
-    var request = http.MultipartRequest('POST', url); // POST request to the correct URL
-    request.files.add(await http.MultipartFile.fromPath('file', image.path));
-    
+    var request = http.MultipartRequest('POST', url);
+
+    // Tambahkan semua file ke dalam request
+    for (var image in images) {
+      request.files.add(await http.MultipartFile.fromPath('files', image.path));
+    }
+
     var response = await request.send();
     if (response.statusCode == 200) {
       var responseData = await http.Response.fromStream(response);
-      var data = responseData.body;
-      print(responseData.body);
+      var jsonResponse = jsonDecode(responseData.body);
 
-      // Parsing data from the response and getting the prediction result
-      var jsonResponse = jsonDecode(data); // Convert response to JSON
-      String prediction = jsonResponse['prediction']; // Extract prediction
-
-      return {'status': true, 'prediction': prediction}; // Return prediction
+      if (jsonResponse.containsKey('results')) {
+        return {
+          'status': true,
+          'results': jsonResponse['results'], // Hasil prediksi untuk setiap gambar
+        };
+      } else {
+        return {
+          'status': false,
+          'message': 'Response tidak valid dari server.',
+        };
+      }
     } else {
-      return {'status': false, 'message': 'Server error: ${response.statusCode}'};
+      return {
+        'status': false,
+        'message': 'Server error: ${response.statusCode}',
+      };
     }
+  } on SocketException catch (_) {
+    return {
+      'status': false,
+      'message': 'Tidak dapat terhubung ke server. Periksa koneksi Anda.',
+    };
   } catch (e) {
-    return {'status': false, 'message': 'Error: $e'};
+    return {
+      'status': false,
+      'message': 'Error tidak terduga: $e',
+    };
   }
 }
+

@@ -7,12 +7,14 @@ Widget customTextField({
   required String hintText,
   bool obscureText = false,
   Widget? suffixIcon,
+  TextInputType keyboardType = TextInputType.text,
 }) {
   return TextField(
     controller: controller,
     obscureText: obscureText,
     cursorColor: const Color.fromARGB(255, 68, 91, 75),
     style: const TextStyle(color: Color.fromARGB(255, 68, 91, 75)),
+    keyboardType: keyboardType,
     decoration: InputDecoration(
       labelText: labelText,
       labelStyle: const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),

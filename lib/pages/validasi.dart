@@ -1,21 +1,56 @@
 import 'package:flutter/material.dart';
-// import 'package:food_plan/pages/home_page.dart';
+import 'package:food_plan/helpers/validasi_helper.dart';
+import 'package:food_plan/widgets/customBtnBorder.dart';
 
 class ValidasiScreen extends StatefulWidget {
   const ValidasiScreen({super.key});
 
   @override
-  ValidasiFormScreenState createState() => ValidasiFormScreenState();
+  // ignore: library_private_types_in_public_api
+  _ValidasiScreenState createState() => _ValidasiScreenState();
 }
 
-class ValidasiFormScreenState extends State<ValidasiScreen> {
+class _ValidasiScreenState extends State<ValidasiScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  String? _dietType;
-  String? _gender;
-  String? _height;
-  String? _weight;
-  String? _age;
+  // Variabel untuk menyimpan input pengguna
+  String? _jenisKelamin, _riwayat;
+  int? _categoryId, _usia, _tinggiBadan, _beratBadan;
+
+  // Fungsi untuk mengirim data validasi
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      // Validasi form
+      try {
+        // Mengirim data ke server
+        var response = await ValidasiHelper().submitValidationData(
+          usia: _usia ?? 0,
+          jenisKelamin: _jenisKelamin ?? '',
+          tinggiBadan: _tinggiBadan ?? 0,
+          beratBadan: _beratBadan ?? 0,
+          riwayat: _riwayat ?? '',
+          categoryId: _categoryId ?? 1,
+        );
+
+        if (response['status'] == 'success') {
+          // Navigasi ke halaman berikutnya jika berhasil
+          // ignore: use_build_context_synchronously
+          Navigator.pushNamed(context, '/beranda');
+        } else {
+          // Tampilkan error jika gagal
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response['message'])),
+          );
+        }
+      } catch (e) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Gagal mengirim data')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,171 +84,162 @@ class ValidasiFormScreenState extends State<ValidasiScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 10),
-
-                // Diet Type Dropdown
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField<int>(
                   decoration: InputDecoration(
                     labelText: 'Pilih Jenis Diet',
-                    labelStyle:
-                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  value: _dietType,
-                  items: [
-                    'Diet Normal',
-                    'Diet Berat Badan',
-                    'Diet Olahraga',
-                    'Diet Sakit',
-                    'Diet Hamil dan Menyusui'
-                  ].map((diet) {
-                    return DropdownMenuItem(
-                      value: diet,
-                      child: Text(diet),
-                    );
-                  }).toList(),
+                  value: _categoryId,
+                  items: const [
+                    DropdownMenuItem(value: 1, child: Text('Diet Normal')),
+                    DropdownMenuItem(value: 2, child: Text('Diet Berat Badan')),
+                    DropdownMenuItem(value: 3, child: Text('Diet Olahraga')),
+                    DropdownMenuItem(value: 4, child: Text('Diet Sakit')),
+                    DropdownMenuItem(
+                        value: 5, child: Text('Diet Hamil dan Menyusui')),
+                  ],
                   onChanged: (value) {
                     setState(() {
-                      _dietType = value;
+                      _categoryId = value;
                     });
                   },
                   validator: (value) =>
-                      value == null ? 'Pilih jenis diet' : null,
+                      value == null ? 'Kategori diet tidak boleh kosong' : null,
                 ),
                 const SizedBox(height: 10),
-
-                // Gender Dropdown
                 DropdownButtonFormField<String>(
                   decoration: InputDecoration(
                     labelText: 'Pilih Jenis Kelamin',
-                    labelStyle:
-                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  value: _gender,
-                  items: [
-                    'Laki-laki',
-                    'Perempuan',
-                  ].map((gender) {
-                    return DropdownMenuItem(
-                      value: gender,
-                      child: Text(gender),
-                    );
-                  }).toList(),
+                  value: _jenisKelamin,
+                  items: const [
+                    DropdownMenuItem(
+                        value: 'Laki-Laki', child: Text('Laki-Laki')),
+                    DropdownMenuItem(
+                        value: 'Perempuan', child: Text('Perempuan')),
+                  ],
                   onChanged: (value) {
                     setState(() {
-                      _gender = value;
+                      _jenisKelamin = value;
                     });
                   },
                   validator: (value) =>
-                      value == null ? 'Pilih jenis kelamin' : null,
+                      value == null ? 'Jenis kelamin tidak boleh kosong' : null,
                 ),
                 const SizedBox(height: 10),
-
-                // Age Field
                 TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Usia',
                     suffixText: 'tahun',
-                    labelStyle:
-                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  onChanged: (value) {
-                    _age = value;
-                  },
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) => _usia = int.tryParse(value),
                   validator: (value) =>
-                      value!.isEmpty ? 'Masukkan usia Anda' : null,
+                      value!.isEmpty || int.tryParse(value) == null
+                          ? 'Usia harus berupa angka'
+                          : null,
                 ),
                 const SizedBox(height: 10),
-
-                // Height Field
                 TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelStyle:
-                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     labelText: 'Masukkan Tinggi Badan',
                     suffixText: 'Cm',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  onChanged: (value) {
-                    _height = value;
-                  },
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) => _tinggiBadan = int.tryParse(value),
                   validator: (value) =>
-                      value!.isEmpty ? 'Masukkan tinggi badan Anda' : null,
+                      value!.isEmpty || int.tryParse(value) == null
+                          ? 'Tinggi badan harus berupa angka'
+                          : null,
                 ),
                 const SizedBox(height: 10),
-
-                // Weight Field
                 TextFormField(
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelStyle:
-                        const TextStyle(color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
                     labelText: 'Masukkan Berat Badan',
                     suffixText: 'Kg',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Color.fromARGB(255, 68, 91, 75)),
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 68, 91, 75)),
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  onChanged: (value) {
-                    _weight = value;
-                  },
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) => _beratBadan = int.tryParse(value),
                   validator: (value) =>
-                      value!.isEmpty ? 'Masukkan berat badan Anda' : null,
+                      value!.isEmpty || int.tryParse(value) == null
+                          ? 'Berat badan harus berupa angka'
+                          : null,
                 ),
-                const SizedBox(height: 20),
-
-                // Next Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/beranda');
-                      if (_formKey.currentState!.validate()) {
-                        // Navigate to the next screen or perform submission
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 68, 91, 75),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  decoration: InputDecoration(
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 68, 91, 75), fontSize: 12),
+                    labelText: 'Masukkan Riwayat Medis',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
                     ),
-                    child: const Text(
-                      'Next',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 68, 91, 75)),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                   ),
+                  onChanged: (value) => _riwayat = value,
+                  validator: (value) => value!.isEmpty
+                      ? 'Riwayat medis tidak boleh kosong'
+                      : null,
+                ),
+                // Next Button
+                const SizedBox(height: 20),
+                CustomButtonBorder(
+                  label: 'Lanjut', 
+                  height: 45,
+                  onPressed: _submitForm,
                 ),
               ],
             ),
