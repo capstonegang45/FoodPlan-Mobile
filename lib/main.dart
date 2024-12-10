@@ -7,6 +7,7 @@ import 'package:food_plan/pages/planning.dart';
 import 'package:food_plan/pages/profile_setting.dart';
 import 'package:food_plan/pages/register.dart';
 import 'package:food_plan/pages/validasi.dart';
+import 'package:food_plan/services/notification_service.dart';
 import '/pages/login.dart';
 import '/pages/splash_screen.dart';
 import '/pages/overview.dart';
@@ -24,6 +25,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final NotificationService notificationService = NotificationService();
+
+    // Inisialisasi notifikasi dan jadwalkan
+    notificationService.init();
+
+    // Jadwalkan notifikasi untuk makan siang dan makan malam
+    notificationService.scheduleMealNotification(const TimeOfDay(hour: 8, minute: 0)); // Makan siang jam 12
+    notificationService.scheduleMealNotification(const TimeOfDay(hour: 12, minute: 0)); // Makan siang jam 12
+    notificationService.scheduleMealNotification(const TimeOfDay(hour: 18, minute: 0));
     return MaterialApp(
       initialRoute: '/splashscreen',
       routes: {
