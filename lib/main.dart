@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_plan/pages/deteksi.dart';
-import 'package:food_plan/pages/edit_profile.dart';
 import 'package:food_plan/pages/forgot_password.dart';
 import 'package:food_plan/pages/full_resep.dart';
 import 'package:food_plan/pages/planning.dart';
@@ -25,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/splashscreen',
       routes: {
         '/splashscreen': (context) => const SplashScreen(),
@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
         '/rencana': (context) => const RencanaPage(),
         '/fullresep': (context) => const FullResep(),
         '/lupapassword': (context) => const ForgotPasswordPage(),
-        '/editprofile': (context) => const EditProfile(),
         '/profile': (context) => const ProfileSettingsPage(),
 
         // '/detail_rencana': (context) => DetailRencanaPage(),

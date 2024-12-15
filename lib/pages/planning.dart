@@ -64,7 +64,7 @@ class _RencanaPageState extends State<RencanaPage> {
       appBar: AppBar(
         title: const Text('FOODPLAN APP',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: const Color.fromARGB(255, 68, 91, 75),
+        backgroundColor: Colors.teal[900],
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -256,7 +256,7 @@ class FilterButton extends StatelessWidget {
       onSelected: (_) {
         onTap(label);
       },
-      selectedColor: const Color.fromARGB(255, 68, 91, 75),
+      selectedColor: Colors.teal[900],
       backgroundColor: Colors.grey[200],
     );
   }
@@ -303,7 +303,7 @@ class DietPlanCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               margin: const EdgeInsets.only(left: 10, bottom: 10),
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 68, 91, 75),
+                color: Colors.teal[900],
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(

@@ -1,51 +1,63 @@
+// deteksi_helper.dart
 import 'dart:convert';
 import 'dart:io';
 import 'package:food_plan/models/config.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-Future<Map<String, dynamic>> uploadImages(List<File> images) async {
-  final url = Uri.parse('$baseUrl/predict'); // Base URL dari API
+class DeteksiHelper {
+  final ImagePicker _picker = ImagePicker();
 
-  try {
-    var request = http.MultipartRequest('POST', url);
+  Future<File?> pickImageFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    return pickedFile != null ? File(pickedFile.path) : null;
+  }
 
-    // Tambahkan semua file ke dalam request
-    for (var image in images) {
-      request.files.add(await http.MultipartFile.fromPath('files', image.path));
+  Future<File?> pickImageFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    return pickedFile != null ? File(pickedFile.path) : null;
+  }
+
+  Future<Map<String, dynamic>> uploadAndDetect(File image) async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token == null) {
+      throw Exception("Token not found. Please login again.");
     }
 
-    var response = await request.send();
+    final uri = Uri.parse("$baseUrl/predict");
+    final request = http.MultipartRequest("POST", uri);
+
+    request.headers["Authorization"] = "Bearer $token";
+    request.headers["Content-Type"] = "application/json";
+    request.headers["Accept"] = "application/json";
+
+    request.files.add(
+      await http.MultipartFile.fromPath("file", image.path),
+    );
+
+    final response = await request.send();
+
     if (response.statusCode == 200) {
-      var responseData = await http.Response.fromStream(response);
-      var jsonResponse = jsonDecode(responseData.body);
+      final responseBody = await response.stream.bytesToString();
+      final responseJson = json.decode(responseBody);
 
-      if (jsonResponse.containsKey('results')) {
-        return {
-          'status': true,
-          'results': jsonResponse['results'], // Hasil prediksi untuk setiap gambar
-        };
-      } else {
-        return {
-          'status': false,
-          'message': 'Response tidak valid dari server.',
-        };
-      }
-    } else {
+      // Parse detections and products from the response
+      final detections = (responseJson['data']['detections'] as List<dynamic>?)
+              ?.map((detection) => detection['class_name'].toString())
+              .toList() ??
+          [];
+      final products = responseJson['data']['products'];
+
       return {
-        'status': false,
-        'message': 'Server error: ${response.statusCode}',
+        'detections': detections,
+        'products': products,
       };
+    } else {
+      final errorBody = await response.stream.bytesToString();
+      throw Exception("Error: ${response.statusCode}, $errorBody");
     }
-  } on SocketException catch (_) {
-    return {
-      'status': false,
-      'message': 'Tidak dapat terhubung ke server. Periksa koneksi Anda.',
-    };
-  } catch (e) {
-    return {
-      'status': false,
-      'message': 'Error tidak terduga: $e',
-    };
   }
 }
-

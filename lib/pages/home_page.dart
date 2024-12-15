@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:food_plan/helpers/beranda_helper.dart';
+import 'package:food_plan/helpers/logout_helper.dart';
 import 'package:food_plan/models/produk.dart';
 import 'package:food_plan/widgets/custom_bottom_nav.dart';
 import 'package:food_plan/widgets/custom_btn.dart';
@@ -46,6 +47,33 @@ class _HomePageState extends State<HomePage> {
           break;
       }
     }
+  }
+
+  Future<bool?> _showLogoutConfirmationDialog(BuildContext context) async {
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi Logout'),
+          content: const Text('Apakah Anda yakin ingin keluar?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // User canceled
+              },
+              child: const Text('Batal'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // User confirmed
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   final List<String> bannerImages = [
@@ -105,13 +133,132 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/profile');
-            },
+          Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.settings, color: Colors.black),
+              onPressed: () {
+                // Menggunakan Scaffold.of(context) dengan Builder untuk membuka endDrawer
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
           ),
         ],
+      ),
+      endDrawer: Drawer(
+        child: Column(
+          children: [
+            // Bagian header untuk informasi user
+            FutureBuilder<Map<String, dynamic>>(
+              future: futureData,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error loading data'));
+                } else if (!snapshot.hasData) {
+                  return const Center(child: Text('No data available'));
+                }
+
+                final user = User.fromJson(snapshot.data!['user']);
+                final avatarBytes = base64Decode(user.avatar!.split(',')[1]);
+
+                return Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.teal[900],
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundImage: MemoryImage(avatarBytes),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        user.nama,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        user.email,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 20),
+            // Menu navigasi
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                children: [
+                  _buildModernMenuItem(
+                    icon: Icons.settings,
+                    title: 'Pengaturan Akun',
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, '/profile'),
+                  ),
+                  _buildModernMenuDivider(),
+                  _buildModernMenuItem(
+                    icon: Icons.logout,
+                    title: 'Logout',
+                    onTap: () async {
+                      // Tampilkan dialog konfirmasi sebelum logout
+                      bool? shouldLogout = await _showLogoutConfirmationDialog(context);
+                      if (shouldLogout!) {
+                        try {
+                          // Panggil metode logout
+                          await LogoutHelper().logout();
+                          // Navigasi ke halaman login atau halaman lainnya setelah logout
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushReplacementNamed(context, '/login');
+                        // ignore: empty_catches
+                        } catch (e) {
+                        }
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            // Footer
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                '© 2024 FoodPlan',
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -262,4 +409,48 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+// Fungsi untuk membuat menu item modern
+Widget _buildModernMenuItem(
+    {required IconData icon, required String title, VoidCallback? onTap}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(12),
+    splashColor: Colors.teal[100],
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey[100],
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.teal, size: 24),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+        ],
+      ),
+    ),
+  );
+}
+
+// Fungsi untuk divider modern
+Widget _buildModernMenuDivider() {
+  return const Divider(
+    color: Colors.grey,
+    thickness: 1,
+    height: 20,
+    indent: 16,
+    endIndent: 16,
+  );
 }

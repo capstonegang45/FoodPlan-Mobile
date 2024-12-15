@@ -25,8 +25,11 @@ class DetailRencanaPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 68, 91, 75),
-        title: const Text("Detail Rencana"),
+        backgroundColor: Colors.teal[900],
+        title: const Text("Detail Rencana", style: TextStyle(
+          color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20
+        ),
+      ),
       ),
       body: Column(
         children: [
@@ -43,7 +46,7 @@ class DetailRencanaPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 margin: const EdgeInsets.only(bottom: 15, left: 10),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 68, 91, 75),
+                  color: Colors.teal[900],
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -62,11 +65,11 @@ class DetailRencanaPage extends StatelessWidget {
               length: 3,
               child: Column(
                 children: [
-                  const TabBar(
-                    indicatorColor: Color.fromARGB(255, 68, 91, 75),
-                    labelColor: Color.fromARGB(255, 68, 91, 75),
+                  TabBar(
+                    indicatorColor: Colors.teal[900],
+                    labelColor: Colors.teal[900],
                     unselectedLabelColor: Colors.grey,
-                    tabs: [
+                    tabs: const [
                       Tab(text: 'Informasi Rencana'),
                       Tab(text: 'Rekomendasi Makanan'),
                       Tab(text: 'Aktivitas'),

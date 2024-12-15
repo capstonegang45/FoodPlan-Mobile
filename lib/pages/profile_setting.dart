@@ -21,8 +21,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pengaturan Profil'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.teal[900],
+        foregroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -30,6 +30,14 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             Navigator.pushReplacementNamed(context, '/beranda');
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.exit_to_app), // Ikon logout
+            onPressed: () {
+              // _logout();
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: userProfile(),
@@ -62,7 +70,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   children: [
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 150,
+                      height: 180,
                       child: CarouselSlider(
                         items: [
                           'assets/img/lean_clean.png',
@@ -85,7 +93,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                     Positioned(
                       bottom: -30,
                       child: CircleAvatar(
-                        radius: 50,
+                        radius: 55,
                         backgroundImage: _profileImage != null
                             ? FileImage(_profileImage!)
                             : (bytes.isNotEmpty
@@ -101,16 +109,16 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                         onTap: showImagePicker,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.transparent,
+                            color: Colors.teal,
                             borderRadius: BorderRadius.circular(50),
                             border: Border.all(color: Colors.white),
                           ),
                           child: const CircleAvatar(
                             radius: 20,
-                            backgroundColor: Colors.black,
+                            backgroundColor: Colors.white,
                             child: Icon(
                               Icons.edit,
-                              color: Colors.white,
+                              color: Colors.teal,
                               size: 20,
                             ),
                           ),
@@ -123,13 +131,17 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 Text(
                   userData['nama'] ?? 'Nama tidak ditemukan',
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
                 ),
                 Text(
                   userData['email'] ?? 'Email tidak ditemukan',
-                  style: const TextStyle(color: Colors.grey),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Padding(
@@ -166,11 +178,11 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     TextEditingController controller = TextEditingController(text: value);
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(15),
       ),
-      elevation: 4,
+      elevation: 6,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -181,15 +193,19 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
+                  color: Colors.teal,
                 ),
               ),
             ),
             Text(
               value,
-              style: const TextStyle(fontSize: 14),
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+              ),
             ),
             IconButton(
-              icon: const Icon(Icons.edit),
+              icon: const Icon(Icons.edit, color: Colors.teal),
               onPressed: () => _showEditDialog(title, controller),
             ),
           ],
@@ -199,7 +215,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   }
 
   void _showEditDialog(String title, TextEditingController controller) {
-    // Peta tipe diet ke integer
     final Map<String, int> dietMap = {
       'Diet Normal': 1,
       'Diet Berat Badan': 2,
@@ -212,7 +227,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
     if (title == "Jenis Kelamin") {
       options = ['Laki-Laki', 'Perempuan'];
     } else if (title == "Program Diet") {
-      options = dietMap.keys.toList(); // Ambil nama tipe diet
+      options = dietMap.keys.toList();
     }
 
     String? selectedValue = controller.text.isNotEmpty
@@ -254,7 +269,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 if (title == "Program Diet" &&
                     selectedValue != null &&
                     dietMap.containsKey(selectedValue)) {
-                  // Kirim tipe diet sebagai integer
                   int dietValue = dietMap[selectedValue!]!;
                   updateProfileField(title, dietValue.toString());
                 } else if (options.isNotEmpty && selectedValue != null) {

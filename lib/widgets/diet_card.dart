@@ -44,9 +44,9 @@ class DietCard extends StatelessWidget {
             ),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 8.0), // Adjusted padding
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 34, 70, 34), // Dark green color
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
+              decoration: BoxDecoration(
+                color: Colors.teal[900], // Dark green color
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15)),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0), // Added horizontal padding
