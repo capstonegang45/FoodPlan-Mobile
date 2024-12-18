@@ -1,82 +1,47 @@
 import 'package:flutter/material.dart';
 
 class Overview1 extends StatelessWidget {
-  const Overview1({super.key});
+  const Overview1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Plate Image
+            const SizedBox(height: 50),
             Image.asset(
               'assets/img/food_plate.png',
-              height: 200,
+              height: 300,
             ),
-            const SizedBox(height: 32),
-
-            // Title
+            const SizedBox(height: 20),
             const Text(
               'Welcome to\nFOODPLAN',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 68, 91, 75),
-              ),
             ),
-            const SizedBox(height: 16),
-
-            // Description
+            const SizedBox(height: 10),
             const Text(
               'Saatnya menjaga kesehatan dengan pola makan yang seimbang. Mulailah perjalanan diet sehatmu sekarang!',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
-              ),
             ),
-            const SizedBox(height: 32),
-
-            // Page Indicator
+            const SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildPageIndicator(isActive: true),
-                _buildPageIndicator(isActive: false),
-                _buildPageIndicator(isActive: false),
-              ],
-            ),
-            const SizedBox(height: 100),
-
-            // Skip and Next Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/loginorregister');
+                    Navigator.of(context).pushReplacementNamed('/overview3');
                   },
-                  child: const Text(
-                    'LEWATI',
-                    style: TextStyle(color: Colors.black54),
-                  ),
+                  child: const Text('LEWATI'),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/overview2');
+                    Navigator.of(context).pushReplacementNamed('/overview2');
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 68, 91, 75),
-                  ),
-                  child: const Text(
-                    'LANJUT',
-                    style: TextStyle(color: Colors.white),
-                  ),
+                  child: const Text('LANJUT'),
                 ),
               ],
             ),
@@ -85,6 +50,7 @@ class Overview1 extends StatelessWidget {
       ),
     );
   }
+}
 
   Widget _buildPageIndicator({required bool isActive}) {
     return Container(
@@ -98,7 +64,7 @@ class Overview1 extends StatelessWidget {
       ),
     );
   }
-}
+
 
 class Overview2 extends StatelessWidget {
   const Overview2({super.key});

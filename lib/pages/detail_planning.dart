@@ -1,9 +1,10 @@
 // ignore_for_file: unnecessary_string_interpolations
 
-import 'dart:convert';
+// import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:food_plan/models/produk.dart';
-import 'package:food_plan/widgets/recipe_modal.dart';
+// import 'package:food_plan/models/produk.dart';
+// import 'package:food_plan/widgets/recipe_modal.dart';
+
 
 class DetailRencanaPage extends StatelessWidget {
   final String title;
@@ -13,13 +14,13 @@ class DetailRencanaPage extends StatelessWidget {
   final String aktivitas;
 
   const DetailRencanaPage({
-    super.key,
+    Key? key,
     required this.title,
     required this.imagePath,
     required this.informasi,
     required this.rekomendasiMakanan,
     required this.aktivitas,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,7 @@ class DetailRencanaPage extends StatelessWidget {
         backgroundColor: Colors.teal[900],
         title: const Text("Detail Rencana", style: TextStyle(
           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20
-        ),
-      ),
+        )),
       ),
       body: Column(
         children: [
@@ -78,298 +78,9 @@ class DetailRencanaPage extends StatelessWidget {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        // Tab Informasi Rencana
-                        SingleChildScrollView(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Deskripsi
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Deskripsi:',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5,),
-                                    Text(
-                                      '${informasi[0]}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[700]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Kesulitan
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Tingkat Kesulitan:',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      '${informasi[1]}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[700]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Durasi
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Durasi:',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      '${informasi[2]}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[700]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Komitmen
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Komitmen:',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      '${informasi[3]}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[700]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Pilih
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Pilih Diet ini Jika:',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      '${informasi[4]}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[700]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              // Lakukan
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Apa yang akan dilakukan?',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      '${informasi[5]}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[700]),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Tab Rekomendasi Makanan
-                        SingleChildScrollView(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: rekomendasiMakanan.entries.map((entry) {
-                              final waktu = entry.key;
-                              final rekomendasiList = entry.value;
-
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Rekomendasi $waktu'.toUpperCase(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  ...rekomendasiList.map((item) {
-                                    final imageSrc = item['images_src'];
-                                    final title = item['title'];
-                                    final description = item['description'];
-                                    final ingredients = item['ingredients'];
-                                    final steps = item['steps'];
-                                    final id = item['id'];
-                                    final fat = item['fat'];
-                                    final carbohidrat = item['carbohidrat'];
-                                    final protein = item['protein'];
-                                    final categoryId = item['categoryId'];
-                                    final categoryName = item['categoryName'];
-
-                                    return GestureDetector(
-                                      onTap: () {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (BuildContext context) {
-                                            return RecipeDetailModal(
-                                              product: Product(
-                                                id: id,
-                                                title: title,
-                                                description: description,
-                                                ingredients: ingredients ?? '',
-                                                steps: steps ?? '',
-                                                image_src: imageSrc,
-                                                carbohidrat: carbohidrat ?? 0,
-                                                protein: protein ?? 0,
-                                                fat: fat ?? 0,
-                                                categoryId: categoryId ?? 0,
-                                                categoryName:
-                                                    categoryName ?? '',
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: Card(
-                                        elevation: 3,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: SizedBox(
-                                          height: 100,
-                                          width: double.infinity,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                Image.memory(
-                                                  base64Decode(
-                                                      imageSrc.split(',').last),
-                                                  height: 80,
-                                                  width: 80,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                const SizedBox(width: 10),
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        title,
-                                                        maxLines: 1,
-                                                        style: const TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(height: 4),
-                                                      Text(
-                                                        description,
-                                                        maxLines: 2,
-                                                        style: TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              Colors.grey[700],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  // ignore: unnecessary_to_list_in_spreads
-                                  }).toList(),
-                                  const SizedBox(height: 16),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        ),
-
-                        // Tab Aktivitas
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text(
-                            aktivitas,
-                            style: TextStyle(
-                                fontSize: 14, color: Colors.grey[700]),
-                          ),
-                        ),
+                        InformasiRencana(informasi: informasi),
+                        RekomendasiMakanan(rekomendasiMakanan: rekomendasiMakanan),
+                        Aktivitas(aktivitas: aktivitas),
                       ],
                     ),
                   ),
@@ -378,6 +89,115 @@ class DetailRencanaPage extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class InformasiRencana extends StatelessWidget {
+  final List<String> informasi;
+
+  const InformasiRencana({Key? key, required this.informasi}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoSection('Deskripsi:', informasi[0]),
+          _buildInfoSection('Tingkat Kesulitan:', informasi[1]),
+          _buildInfoSection('Durasi:', informasi[2]),
+          _buildInfoSection('Komitmen:', informasi[3]),
+          _buildInfoSection('Pilih Diet ini Jika:', informasi[4]),
+          _buildInfoSection('Apa yang akan dilakukan?', informasi[5]),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoSection(String title, String content) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            content,
+            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class RekomendasiMakanan extends StatelessWidget {
+  final Map<String, List<Map<String, dynamic>>> rekomendasiMakanan;
+
+  const RekomendasiMakanan({Key? key, required this.rekomendasiMakanan}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: rekomendasiMakanan.entries.map((entry) {
+          final waktu = entry.key;
+          final rekomendasiList = entry.value;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Rekomendasi $waktu'.toUpperCase(),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              ...rekomendasiList.map((item) {
+                return ListTile(
+                  title: Text(item['title']),
+                  subtitle: Text(item['description']),
+                  onTap: () {
+                    // Implement modal or navigation to detail
+                  },
+                );
+              }).toList(),
+              const SizedBox(height: 16),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class Aktivitas extends StatelessWidget {
+  final String aktivitas;
+
+  const Aktivitas({Key? key, required this.aktivitas}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Text(
+        aktivitas,
+        style: TextStyle(fontSize: 14, color: Colors.grey[700]),
       ),
     );
   }
