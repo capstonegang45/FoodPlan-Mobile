@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,6 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Email input
                   customTextField(
+                    key: const Key('emailField'),
                     controller: _emailController,
                     labelText: 'Email',
                     hintText: 'Masukkan email Anda',
@@ -164,6 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Password input
                   customTextField(
+                    key: const Key('passwordField'),
                     controller: _passwordController,
                     labelText: 'Kata sandi',
                     hintText: 'Masukkan kata sandi Anda',
@@ -200,6 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 20),
 
                   ElevatedButton(
+                    key: const Key('loginButton'),
                     onPressed: _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 68, 91, 75),
