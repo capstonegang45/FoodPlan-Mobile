@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_plan/pages/deteksi.dart';
 import 'package:food_plan/pages/forgot_password.dart';
@@ -10,11 +11,16 @@ import '/pages/login.dart';
 import '/pages/splash_screen.dart';
 import '/pages/overview.dart';
 import '/pages/login_or_register.dart';
+import 'firebase_options.dart';
 import 'pages/home_page.dart';
 
-// import '/pages/home.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   runApp(const MyApp());
 }
 
