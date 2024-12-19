@@ -95,12 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: const BackButton(),
       ),
       body: Column(
         children: [
@@ -174,6 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 20),
 
                   ElevatedButton(
+                    key: const Key('loginButton'),
                     onPressed: _login,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 68, 91, 75),

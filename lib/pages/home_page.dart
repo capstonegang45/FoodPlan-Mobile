@@ -135,6 +135,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Builder(
             builder: (context) => IconButton(
+              key: const Key('Pengaturan'),
               icon: const Icon(Icons.settings, color: Colors.black),
               onPressed: () {
                 // Menggunakan Scaffold.of(context) dengan Builder untuk membuka endDrawer
@@ -145,6 +146,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       endDrawer: Drawer(
+        key: const Key('Drawer'), 
         child: Column(
           children: [
             // Bagian header untuk informasi user
@@ -183,6 +185,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CircleAvatar(
+                        key: const Key('DrawerAvatar'),
                         radius: 40,
                         backgroundImage: MemoryImage(avatarBytes),
                       ),
@@ -217,6 +220,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 children: [
                   _buildModernMenuItem(
+                    key: const Key('PengaturanAkun'),
                     icon: Icons.settings,
                     title: 'Pengaturan Akun',
                     onTap: () =>
@@ -342,6 +346,7 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (context, index) {
                         final product = matchingProducts[index];
                         return DietCard(
+                          key: const Key("DietCard"),
                           title: product.title,
                           image_src: product.image_src,
                           onTap: () {
@@ -350,7 +355,9 @@ class _HomePageState extends State<HomePage> {
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
                               builder: (context) =>
-                                  RecipeDetailModal(product: product),
+                                  RecipeDetailModal(
+                                    key: const Key('RecipeDetailModal'),
+                                    product: product),
                             );
                           },
                         );
@@ -404,6 +411,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
+        key: const Key('BottomNavigationBar'),
         selectedIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
@@ -413,8 +421,9 @@ class _HomePageState extends State<HomePage> {
 
 // Fungsi untuk membuat menu item modern
 Widget _buildModernMenuItem(
-    {required IconData icon, required String title, VoidCallback? onTap}) {
+    {required IconData icon, required String title, VoidCallback? onTap, Key? key}) {
   return InkWell(
+    key: key,
     onTap: onTap,
     borderRadius: BorderRadius.circular(12),
     splashColor: Colors.teal[100],

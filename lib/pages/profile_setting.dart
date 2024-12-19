@@ -25,19 +25,12 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
         foregroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
+          key: const Key('IconBack'),
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacementNamed(context, '/beranda');
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app), // Ikon logout
-            onPressed: () {
-              // _logout();
-            },
-          ),
-        ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: userProfile(),
@@ -93,6 +86,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                     Positioned(
                       bottom: -30,
                       child: CircleAvatar(
+                        key: const Key('AvatarProfile'),
                         radius: 55,
                         backgroundImage: _profileImage != null
                             ? FileImage(_profileImage!)
@@ -106,6 +100,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                       bottom: -28,
                       right: MediaQuery.of(context).size.width / 2.5 - 9,
                       child: InkWell(
+                        key: const Key('ShowImagePicker'),
                         onTap: showImagePicker,
                         child: Container(
                           decoration: BoxDecoration(
@@ -205,6 +200,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
               ),
             ),
             IconButton(
+              key: const Key('Edit'),
               icon: const Icon(Icons.edit, color: Colors.teal),
               onPressed: () => _showEditDialog(title, controller),
             ),
@@ -241,6 +237,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
           title: Text('Edit $title'),
           content: options.isNotEmpty
               ? DropdownButtonFormField<String>(
+                  key: const Key('DropDownButton'),
                   value: selectedValue,
                   items: options
                       .map((option) => DropdownMenuItem(
@@ -265,6 +262,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 ),
           actions: <Widget>[
             TextButton(
+              key: const Key('Simpan'),
               onPressed: () {
                 if (title == "Program Diet" &&
                     selectedValue != null &&

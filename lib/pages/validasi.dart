@@ -57,12 +57,7 @@ class _ValidasiScreenState extends State<ValidasiScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Informasi tambahan'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: const BackButton(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -85,6 +80,7 @@ class _ValidasiScreenState extends State<ValidasiScreen> {
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<int>(
+                  key: const Key('JenisDietDropdown'),
                   decoration: InputDecoration(
                     labelText: 'Pilih Jenis Diet',
                     labelStyle: const TextStyle(
@@ -117,6 +113,7 @@ class _ValidasiScreenState extends State<ValidasiScreen> {
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<String>(
+                  key: const Key('JenisKelaminDropdown'),
                   decoration: InputDecoration(
                     labelText: 'Pilih Jenis Kelamin',
                     labelStyle: const TextStyle(

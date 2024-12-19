@@ -20,14 +20,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
       onTap: onTap,
       items: const [
         BottomNavigationBarItem(
+          key: Key('BerandaPage'),
           icon: Icon(Icons.home),
           label: 'BERANDA',
         ),
         BottomNavigationBarItem(
+          key: Key('DeteksiPage'),
           icon: Icon(Icons.camera_alt_outlined),
           label: 'DETEKSI',
         ),
         BottomNavigationBarItem(
+          key: Key('RencanaPage'),
           icon: Icon(Icons.calendar_today_outlined),
           label: 'RENCANA',
         ),
