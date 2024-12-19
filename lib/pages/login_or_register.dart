@@ -69,7 +69,9 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                   height: 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: _isHoveringMasuk ? Colors.white : const Color.fromARGB(255, 68, 91, 75),
+                    color: _isHoveringMasuk
+                        ? Colors.white
+                        : const Color.fromARGB(255, 68, 91, 75),
                     borderRadius: BorderRadius.circular(30.0),
                     border: Border.all(
                       color: Colors.green[900]!,
@@ -79,8 +81,9 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                     child: Text(
                       'MASUK',
                       style: TextStyle(
-                        color:
-                            _isHoveringMasuk ? const Color.fromARGB(255, 68, 91, 75) : Colors.white,
+                        color: _isHoveringMasuk
+                            ? const Color.fromARGB(255, 68, 91, 75)
+                            : Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -103,11 +106,14 @@ class _LoginOrRegisterState extends State<LoginOrRegister> {
                   height: 50,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: _isHoveringDaftar ? const Color.fromARGB(255, 68, 91, 75) : Colors.white,
+                    color: _isHoveringDaftar
+                        ? const Color.fromARGB(255, 68, 91, 75)
+                        : Colors.white,
                     borderRadius: BorderRadius.circular(30.0),
                     border: Border.all(
-                      color:
-                          _isHoveringDaftar ? Colors.white : const Color.fromARGB(255, 68, 91, 75),
+                      color: _isHoveringDaftar
+                          ? Colors.white
+                          : const Color.fromARGB(255, 68, 91, 75),
                     ),
                   ),
                   child: Center(

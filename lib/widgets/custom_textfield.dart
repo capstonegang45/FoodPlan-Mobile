@@ -7,7 +7,7 @@ Widget customTextField({
   required String hintText,
   bool obscureText = false,
   Widget? suffixIcon,
-  TextInputType keyboardType = TextInputType.text,
+  TextInputType keyboardType = TextInputType.text, required Key key,
 }) {
   return TextField(
     controller: controller,
