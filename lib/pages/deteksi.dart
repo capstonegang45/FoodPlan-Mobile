@@ -10,6 +10,7 @@ class DeteksiPage extends StatefulWidget {
   const DeteksiPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _DeteksiPageState createState() => _DeteksiPageState();
 }
 
@@ -59,6 +60,7 @@ class _DeteksiPageState extends State<DeteksiPage> {
         _matchingProducts = result['products']; // Update products
       });
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Terjadi kesalahan: ${e.toString()}")),
       );
