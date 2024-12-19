@@ -15,4 +15,8 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+    <!-- <string name="default_web_client_id" translatable="false">705335153334-akppt6gdk3vjkrm72i1j8qutpr2df6fg.apps.googleusercontent.com</string>
+    <string name="google_api_key" translatable="false">AIzaSyAsLritoG1imuu7cjjDd4UymPRV_gVCzcc</string>
+    <string name="google_app_id" translatable="false">1:705335153334:android:d36a2ba80827d40ec8cc17</string>
+    <string name="project_id" translatable="false">tranquil-gasket-442909-i2</string> -->
 </resources>

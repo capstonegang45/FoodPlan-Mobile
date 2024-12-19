@@ -129,6 +129,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 10),
 
             customTextField(
+              key: const Key('sandi'),
               controller: _passwordController,
               labelText: 'Kata sandi',
               hintText: 'Masukkan kata sandi Anda',
@@ -148,13 +149,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 10),
 
             customTextField(
+              key: const Key('cusrsandi'),
               controller: _confirmPasswordController,
               labelText: 'Konfirmasi Kata sandi',
               hintText: 'Masukkan ulang kata sandi Anda',
               obscureText: !_isConfirmPasswordVisible,
               suffixIcon: IconButton(
                 icon: Icon(
-                  _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  _isConfirmPasswordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
                   color: const Color.fromARGB(255, 68, 91, 75),
                 ),
                 onPressed: () {

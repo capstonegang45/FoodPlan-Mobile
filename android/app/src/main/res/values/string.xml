@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FoodPlan</string>
+    <string name="facebook_app_id">558973090352229</string>
+    <string name="fb_login_protocol_scheme">fb558973090352229</string>
+    <string name="facebook_client_token">5b6af8f6bf08788ad56143547f2eabc0</string>
+</resources>

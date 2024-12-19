@@ -1,10 +1,11 @@
-// import 'dart:convert';
-// import 'dart:typed_data';
+// ignore_for_file: use_build_context_synchronously
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_plan/helpers/google_signin_helper.dart';
+import 'package:food_plan/models/config.dart';
 import 'package:food_plan/widgets/customBtnBorder.dart';
-// import 'package:food_plan/models/config.dart';
-// import 'package:http/http.dart' as http;
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../helpers/login_helper.dart';
 import '../widgets/custom_textfield.dart';
 
@@ -19,9 +20,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   // ignore: unused_field
-  final bool _isLoading = false;
+  bool _isLoading = false;
   String _message = '';
   bool _isPasswordVisible = false;
+
+  Future<UserCredential> signInWithFacebook() async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential('${loginResult.accessToken?.tokenString}');
+
+    // Once signed in, return the UserCredential
+    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+  }
 
   void _login() async {
     String email = _emailController.text.trim();
@@ -49,6 +62,28 @@ class _LoginScreenState extends State<LoginScreen> {
       // If no 'user' key, it's an error response
       _showErrorDialog(_message);
     }
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    setState(() => _isLoading = true);
+
+    // ignore: unnecessary_string_interpolations
+    const backendUrl = '$baseUrl'; // Ganti dengan URL Flask kamu
+    final result = await GoogleSignInHelper.signInWithGoogle(backendUrl);
+
+    if (result['success']) {
+      final userData = result['data']['user'];
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Welcome ${userData['nama']}!")),
+      );
+      Navigator.pushReplacementNamed(context, '/validasi');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${result['message']}")),
+      );
+    }
+
+    setState(() => _isLoading = false);
   }
 
   void _showSuccessDialog(String message) {
@@ -90,7 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
-  
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Email input
                   customTextField(
+                    key: const Key('emailField'),
                     controller: _emailController,
                     labelText: 'Email',
                     hintText: 'Masukkan email Anda',
@@ -133,6 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Password input
                   customTextField(
+                    key: const Key('passwordField'),
                     controller: _passwordController,
                     labelText: 'Kata sandi',
                     hintText: 'Masukkan kata sandi Anda',
@@ -201,7 +239,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 45,
                       icon: FontAwesomeIcons.github,
                       label: "Masuk dengan akun Github",
-                      onPressed: () {},
+                      onPressed: () {
+                        signInWithFacebook();
+                      },
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -210,7 +250,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 45,
                       icon: FontAwesomeIcons.google,
                       label: "Masuk dengan akun Google",
-                      onPressed: () {},
+                      onPressed: () {
+                        _handleGoogleSignIn();
+                      },
                     ),
                   ),
                 ],

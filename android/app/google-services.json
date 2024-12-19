@@ -37,6 +37,13 @@
             {
               "client_id": "705335153334-akppt6gdk3vjkrm72i1j8qutpr2df6fg.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "705335153334-87641m1946fei8q0icjh9dj51roth6u8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foodPlan"
+              }
             }
           ]
         }
