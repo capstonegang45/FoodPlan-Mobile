@@ -9,7 +9,6 @@ class VerifyOtpPage extends StatefulWidget {
   const VerifyOtpPage({super.key, required this.email});
 
   @override
-  // ignore: library_private_types_in_public_api
   _VerifyOtpPageState createState() => _VerifyOtpPageState();
 }
 
@@ -49,12 +48,10 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
         // Berhasil verifikasi OTP
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(responseData['message']),
         ));
         Navigator.push(
-          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(
             builder: (context) =>
@@ -62,13 +59,11 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
           ),
         );
       } else {
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(responseData['message']),
         ));
       }
     } catch (error) {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Terjadi kesalahan!'),
       ));
@@ -83,29 +78,41 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verifikasi OTP'),
-        backgroundColor: const Color(0xFF2E7D32),
+        title: const Text(
+          'Verifikasi OTP',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        backgroundColor: Colors.teal[900],
+        centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/logo_foodplan.png', // Ganti dengan path logo Anda
+                'assets/img/logolagi.png', // Ganti dengan path logo Anda
                 height: 100,
               ),
               const SizedBox(height: 24),
               const Text(
                 "MASUKKAN KODE OTP",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
+                  color: Color(0xFF2E7D32),
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              // Kotak OTP
+              const Text(
+                "Kami telah mengirimkan kode OTP ke email Anda. Masukkan kode tersebut di bawah ini.",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: List.generate(6, (index) {
@@ -116,6 +123,10 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                       maxLength: 1,
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                       decoration: InputDecoration(
                         counterText: "",
                         border: OutlineInputBorder(
@@ -133,8 +144,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                   );
                 }),
               ),
-              const SizedBox(height: 24),
-              // Tombol Verifikasi
+              const SizedBox(height: 32),
               _isLoading
                   ? const CircularProgressIndicator()
                   : ElevatedButton(
@@ -149,14 +159,15 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                       ),
                       child: const Text(
                         "Verifikasi",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
               const SizedBox(height: 16),
               GestureDetector(
                 onTap: () {
-                  // Logika Kirim Ulang OTP
-                  
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text('Fitur kirim ulang OTP belum tersedia'),
                   ));

@@ -189,35 +189,41 @@ class _DeteksiPageState extends State<DeteksiPage> {
                 ),
                 const SizedBox(height: 20),
                 if (_result.isNotEmpty)
-                  SizedBox(
-                    height: 80, // Limit the height of the result section
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Hasil Deteksi:",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          ListView.builder(
-                            shrinkWrap:
-                                true, // Agar ListView bisa berada dalam SingleChildScrollView
-                            physics:
-                                const NeverScrollableScrollPhysics(), // Nonaktifkan scroll independen
-                            itemCount: _result.length,
-                            itemBuilder: (context, index) {
-                              return Text(
-                                "${index + 1}. ${_result[index]}",
-                                style: const TextStyle(fontSize: 14),
-                              );
-                            },
-                          ),
-                        ],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Hasil Deteksi:",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: _result.length,
+                        itemBuilder: (context, index) {
+                          return Card(
+                            elevation: 2,
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            child: ListTile(
+                              leading: Icon(
+                                Icons.check_circle,
+                                color: Colors.teal[900],
+                              ),
+                              title: Text(
+                                _result[index],
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -230,7 +236,7 @@ class _DeteksiPageState extends State<DeteksiPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 15),
                 if (_matchingProducts.isNotEmpty)
                   SingleChildScrollView(
                     scrollDirection:

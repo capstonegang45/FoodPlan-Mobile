@@ -1,11 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_plan/helpers/facebook_signin_helper.dart';
 import 'package:food_plan/helpers/google_signin_helper.dart';
 import 'package:food_plan/models/config.dart';
 import 'package:food_plan/widgets/customBtnBorder.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../helpers/login_helper.dart';
 import '../widgets/custom_textfield.dart';
 
@@ -24,16 +23,22 @@ class _LoginScreenState extends State<LoginScreen> {
   String _message = '';
   bool _isPasswordVisible = false;
 
-  Future<UserCredential> signInWithFacebook() async {
-    // Trigger the sign-in flow
-    final LoginResult loginResult = await FacebookAuth.instance.login();
+  void _loginWithFacebook() async {
+    const String backendUrl = "http://your-backend-url.com";
 
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential('${loginResult.accessToken?.tokenString}');
+    final result = await FacebookSignInHelper.signInWithFacebook(backendUrl);
 
-    // Once signed in, return the UserCredential
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    if (result['success']) {
+      final userData = result['data']['user'];
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Welcome ${userData['nama']}!")),
+      );
+      Navigator.pushReplacementNamed(context, '/validasi');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${result['message']}")),
+      );
+    }
   }
 
   void _login() async {
@@ -125,7 +130,6 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -237,10 +241,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: CustomButtonBorder(
                       height: 45,
-                      icon: FontAwesomeIcons.github,
-                      label: "Masuk dengan akun Github",
+                      icon: FontAwesomeIcons.facebook,
+                      label: "Masuk Dengan Akun Facebook",
                       onPressed: () {
-                        signInWithFacebook();
+                        _loginWithFacebook();
                       },
                     ),
                   ),
@@ -249,7 +253,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: CustomButtonBorder(
                       height: 45,
                       icon: FontAwesomeIcons.google,
-                      label: "Masuk dengan akun Google",
+                      label: "Masuk Dengan Akun Google",
                       onPressed: () {
                         _handleGoogleSignIn();
                       },

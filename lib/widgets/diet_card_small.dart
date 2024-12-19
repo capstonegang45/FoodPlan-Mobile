@@ -40,7 +40,7 @@ class DietCardSmall extends StatelessWidget {
                     : Image.memory(
                         bytes,
                         fit: BoxFit.cover,
-                        height: 80,
+                        height: 100,
                       ),
               ),
               Container(
