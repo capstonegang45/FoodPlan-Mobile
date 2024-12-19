@@ -1,17 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-<<<<<<< HEAD
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:permissionGroup="android.permission-group.Storage"/>
-=======
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:permissionGroup="android.permission-group.Storage"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <queries>
         <provider android:authorities="con.facebook.katana.provider.PlatformProvider" />
     </queries>
->>>>>>> 4518fb28f1326e651cfa20517a5711670536e441
 
     <application
         android:label="FoodPlan"

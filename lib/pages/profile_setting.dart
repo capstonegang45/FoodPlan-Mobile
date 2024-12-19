@@ -274,6 +274,9 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 } else {
                   updateProfileField(title, controller.text);
                 }
+
+                setState(
+                    () {}); // Tambahkan ini untuk merebuild UI setelah data diperbarui.
                 Navigator.pop(context);
               },
               child: const Text('Simpan'),

@@ -47,8 +47,6 @@ class MyApp extends StatelessWidget {
         '/fullresep': (context) => const FullResep(),
         '/lupapassword': (context) => const ForgotPasswordPage(),
         '/profile': (context) => const ProfileSettingsPage(),
-
-        // '/detail_rencana': (context) => DetailRencanaPage(),
       },
     );
   }

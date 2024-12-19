@@ -135,12 +135,6 @@ class _DeteksiPageState extends State<DeteksiPage> {
                           key: const Key('GestureDetectorCamera'),
                           onTap: () async {
                             await _pickImageFromCamera();
-
-                            // ignore: use_build_context_synchronously
-                            if (Navigator.canPop(context)) {
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
-                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -158,12 +152,6 @@ class _DeteksiPageState extends State<DeteksiPage> {
                           key: const Key('GestureDetectorGallery'),
                           onTap: () async {
                             await _pickImageFromGallery();
-                            // Tambahkan penutupan modal jika ada
-                            // ignore: use_build_context_synchronously
-                            if (Navigator.canPop(context)) {
-                              // ignore: use_build_context_synchronously
-                              Navigator.pop(context);
-                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
