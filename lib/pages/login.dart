@@ -5,6 +5,8 @@ import 'package:food_plan/helpers/facebook_signin_helper.dart';
 import 'package:food_plan/helpers/google_signin_helper.dart';
 import 'package:food_plan/models/config.dart';
 import 'package:food_plan/widgets/customBtnBorder.dart';
+import 'package:food_plan/widgets/toastification_wigdet.dart';
+import 'package:toastification/toastification.dart';
 import '../helpers/login_helper.dart';
 import '../widgets/custom_textfield.dart';
 
@@ -24,19 +26,26 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
 
   void _loginWithFacebook() async {
-    const String backendUrl = "http://your-backend-url.com";
+    // ignore: unnecessary_string_interpolations
+    String backendUrl = "$baseUrl";
 
     final result = await FacebookSignInHelper.signInWithFacebook(backendUrl);
 
     if (result['success']) {
       final userData = result['data']['user'];
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Welcome ${userData['nama']}!")),
+      await showCustomToastNotification(
+        context: context, 
+        title: 'Success', 
+        message: "Welcome ${userData['nama']}!", 
+        type: ToastificationType.success
       );
       Navigator.pushReplacementNamed(context, '/validasi');
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${result['message']}")),
+      await showCustomToastNotification(
+        context: context, 
+        title: 'Error', 
+        message: "Error: ${result['message']}", 
+        type: ToastificationType.error
       );
     }
   }
@@ -50,7 +59,12 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _message = 'Both fields are required.';
       });
-      _showErrorDialog(_message);
+      await showCustomToastNotification(
+        context: context, 
+        title: 'Error', 
+        message: _message, 
+        type: ToastificationType.error
+      );
       return;
     }
 
@@ -62,10 +76,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (response.containsKey('user')) {
       // If 'user' is present in the response, login is successful
-      _showSuccessDialog(_message);
+      await showCustomToastNotification(
+        context: context, 
+        title: 'Success', 
+        message: _message, 
+        type: ToastificationType.success
+      );
+      Navigator.pushReplacementNamed(context, '/validasi');
     } else {
-      // If no 'user' key, it's an error response
-      _showErrorDialog(_message);
+      await showCustomToastNotification(
+        context: context, 
+        title: 'Error', 
+        message: _message, 
+        type: ToastificationType.error,
+      );
     }
   }
 
@@ -78,58 +102,64 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (result['success']) {
       final userData = result['data']['user'];
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Welcome ${userData['nama']}!")),
+      await showCustomToastNotification(
+        context: context, 
+        title: 'Success', 
+        message: "Welcome ${userData['nama']}!", 
+        type: ToastificationType.success
       );
       Navigator.pushReplacementNamed(context, '/validasi');
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: ${result['message']}")),
+      await showCustomToastNotification(
+        context: context, 
+        title: 'Error', 
+        message: "Error: ${result['message']}", 
+        type: ToastificationType.error
       );
     }
 
     setState(() => _isLoading = false);
   }
 
-  void _showSuccessDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Login Successful'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, '/validasi');
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showSuccessDialog(String message) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Login Successful'),
+  //         content: Text(message),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('OK'),
+  //             onPressed: () {
+  //               Navigator.pushReplacementNamed(context, '/validasi');
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
-  void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Login Failed'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showErrorDialog(String message) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Login Failed'),
+  //         content: Text(message),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text('OK'),
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,9 @@ import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:food_plan/helpers/profile_helper.dart';
+import 'package:food_plan/widgets/toastification_wigdet.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:toastification/toastification.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({super.key});
@@ -263,7 +265,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
           actions: <Widget>[
             TextButton(
               key: const Key('Simpan'),
-              onPressed: () {
+              onPressed: () async {
                 if (title == "Program Diet" &&
                     selectedValue != null &&
                     dietMap.containsKey(selectedValue)) {
@@ -276,7 +278,13 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                 }
 
                 setState(
-                    () {}); // Tambahkan ini untuk merebuild UI setelah data diperbarui.
+                    () {});
+                await  showCustomToastNotification(
+                  context: context, 
+                  title: 'Success', 
+                  message: 'Perubahan Telah Disimpan!', 
+                  type: ToastificationType.success
+                );
                 Navigator.pop(context);
               },
               child: const Text('Simpan'),

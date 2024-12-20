@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:food_plan/models/produk.dart';
 import 'package:food_plan/widgets/recipe_modal.dart';
+import 'package:food_plan/widgets/toastification_wigdet.dart';
+import 'package:toastification/toastification.dart';
 import '../widgets/custom_bottom_nav.dart';
 import '../helpers/deteksi_helper.dart';
 import '../widgets/diet_card_small.dart'; // Import DietCardSmall
@@ -40,9 +44,11 @@ class _DeteksiPageState extends State<DeteksiPage> {
 
   Future<void> _uploadAndDetect() async {
     if (_image == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Silakan pilih gambar terlebih dahulu")),
-      );
+      await showCustomToastNotification(
+          context: context,
+          title: 'Error',
+          message: "Silakan pilih gambar terlebih dahulu",
+          type: ToastificationType.error);
       return;
     }
 
@@ -62,9 +68,13 @@ class _DeteksiPageState extends State<DeteksiPage> {
         _matchingProducts = result['products']; // Update products
       });
     } catch (e) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Terjadi kesalahan: ${e.toString()}")),
+      // Menggunakan ScaffoldMessenger.of(context) agar toastification tampil di atas semua widget yang menggunakan Scaffold
+
+      await showCustomToastNotification(
+        context: context,
+        title: 'Error',
+        message: "Terjadi kesalahan saat mendapatkan hasil deteksi",
+        type: ToastificationType.error
       );
     } finally {
       setState(() {

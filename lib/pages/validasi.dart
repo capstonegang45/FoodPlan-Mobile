@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:food_plan/helpers/validasi_helper.dart';
 import 'package:food_plan/widgets/customBtnBorder.dart';
+import 'package:food_plan/widgets/toastification_wigdet.dart';
+import 'package:toastification/toastification.dart';
 
 class ValidasiScreen extends StatefulWidget {
   const ValidasiScreen({super.key});
@@ -34,20 +38,25 @@ class _ValidasiScreenState extends State<ValidasiScreen> {
 
         if (response['status'] == 'success') {
           // Navigasi ke halaman berikutnya jika berhasil
-          // ignore: use_build_context_synchronously
+          await showCustomToastNotification(
+              context: context,
+              title: 'Success',
+              message: response['message'],
+              type: ToastificationType.success);
           Navigator.pushNamed(context, '/beranda');
         } else {
-          // Tampilkan error jika gagal
-          // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(response['message'])),
-          );
+          await showCustomToastNotification(
+              context: context,
+              title: 'Error',
+              message: response['message'],
+              type: ToastificationType.error);
         }
       } catch (e) {
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gagal mengirim data')),
-        );
+        await showCustomToastNotification(
+            context: context,
+            title: 'Error',
+            message: 'Gagal mengirim data',
+            type: ToastificationType.error);
       }
     }
   }
@@ -234,7 +243,7 @@ class _ValidasiScreenState extends State<ValidasiScreen> {
                 // Next Button
                 const SizedBox(height: 20),
                 CustomButtonBorder(
-                  label: 'Lanjut', 
+                  label: 'Lanjut',
                   height: 45,
                   onPressed: _submitForm,
                 ),

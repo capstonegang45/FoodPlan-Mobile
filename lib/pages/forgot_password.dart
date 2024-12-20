@@ -1,8 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:food_plan/models/config.dart';
 import 'package:food_plan/pages/verify_otp.dart';
+import 'package:food_plan/widgets/toastification_wigdet.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:toastification/toastification.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -22,9 +26,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     final email = _emailController.text;
     if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Email tidak boleh kosong!'),
-      ));
+      await showCustomToastNotification(
+        context: context,
+        title: 'Error',
+        message: 'Email tidak boleh kosong!',
+        type: ToastificationType.error // Warna merah untuk kesalahan
+      );
       setState(() {
         _isLoading = false;
       });
@@ -41,10 +48,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
-        // Berhasil mengirim OTP
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(responseData['message']),
-        ));
+        await showCustomToastNotification(
+          context: context, 
+          title: 'Success', 
+          message: responseData['message'], 
+          type: ToastificationType.success
+        );
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -52,14 +61,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(responseData['message']),
-        ));
+        await showCustomToastNotification(
+          context: context,
+          title: 'Error',
+          message: responseData['message'],
+          type: ToastificationType.error // Warna merah untuk kesalahan
+        );
       }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Terjadi kesalahan!'),
-      ));
+      await showCustomToastNotification(
+        context: context,
+        title: 'Error',
+        message: 'Terjadi kesalahan!',
+        type: ToastificationType.error// Warna merah untuk kesalahan
+      );
     } finally {
       setState(() {
         _isLoading = false;
