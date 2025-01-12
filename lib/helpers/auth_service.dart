@@ -63,4 +63,37 @@ class AuthService {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
   }
+
+  static Future<Map<String, dynamic>> deleteAccount() async {
+    try {
+      // Ambil token dari Shared Preferences
+      final token = await AuthService.getToken();
+      if (token == null) {
+        return {"status": "error", "message": "Token belum terdaftar"};
+      }
+
+      // Kirim permintaan ke API untuk menghapus akun
+      final response = await http.post(
+        Uri.parse('$baseUrl/delete-account'),
+        headers: {
+          "Authorization": "Bearer $token",
+          "Content-Type": "application/json",
+        },
+      );
+
+      // Proses respon dari server
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        if (responseData["message"] != null) {
+          return {"status": "success", "message": responseData["message"]};
+        }
+      } else if (response.statusCode == 401) {
+        return {"status": "error", "message": "Token tidak valid"};
+      }
+
+      return {"status": "error", "message": "Gagal menghapus akun"};
+    } catch (e) {
+      return {"status": "error", "message": e.toString()};
+    }
+  }
 }

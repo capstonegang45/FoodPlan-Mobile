@@ -1,34 +1,42 @@
+// ignore: file_names
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:food_plan/pages/deteksi.dart';
+import 'package:food_plan/pages/chattbot.dart';
 import 'package:food_plan/pages/home_page.dart';
 import 'package:food_plan/pages/login.dart';
-import 'package:food_plan/pages/profile_setting.dart';
 import 'package:food_plan/pages/validasi.dart';
+import 'package:food_plan/provider/chat_provider.dart';
+import 'package:food_plan/provider/rencana_providers.dart';
+import 'package:food_plan/provider/users_providers.dart';
+import 'package:food_plan/widgets/custom_bottom_nav.dart';
 import 'package:food_plan/widgets/diet_card.dart';
-// import 'package:food_plan/widgets/diet_card_small.dart';
 import 'package:food_plan/widgets/recipe_modal.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('Food Plan App Integration Tests', () {
     testWidgets('Integration Tests', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
+      await tester.pumpWidget(MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => UserProvider()),
+          ChangeNotifierProvider(create: (_) => RencanaProvider()),
+          ChangeNotifierProvider(create: (_) => ChatProvider()),
+        ],
+        child: MaterialApp(
           debugShowCheckedModeBanner: false,
           initialRoute: '/login',
           routes: {
             '/login': (context) => const LoginScreen(),
             '/validasi': (context) => const ValidasiScreen(),
             '/beranda': (context) => const HomePage(),
-            '/profile': (context) => const ProfileSettingsPage(),
-            '/deteksi': (context) => const DeteksiPage(),
+            '/chatbot': (context) => const ChatScreen(),
           },
         ),
-      );
+      ));
 
       await tester.pumpAndSettle();
 
@@ -38,7 +46,7 @@ void main() {
       // Masukkan email dan password
       await tester.enterText(
           find.byType(TextField).at(0), 'ilhamhattamanggala123@gmail.com');
-      await tester.enterText(find.byType(TextField).at(1), 'ilham123');
+      await tester.enterText(find.byType(TextField).at(1), 'Ilham123');
 
       await tester.pumpAndSettle();
       await tester.drag(
@@ -47,11 +55,7 @@ void main() {
 
       // Tekan tombol login
       await tester.tap(find.byKey(const Key('loginButton')));
-      await tester.pumpAndSettle(const Duration(seconds: 3));
-      // Verifikasi dialog berhasil login
-      expect(find.byType(Dialog), findsOneWidget);
-      expect(find.text('Login Successful'), findsOneWidget);
-      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle(const Duration(seconds: 7));
 
       await tester.pumpAndSettle();
       // Pastikan berada di layar Validasi
@@ -84,8 +88,7 @@ void main() {
       // Tekan tombol lanjut
       await tester.tap(find.text('Lanjut'));
       await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-      // Verifikasi navigasi ke homepage
+      await tester.pumpAndSettle(const Duration(seconds: 5));
       expect(find.byType(CarouselSlider), findsOneWidget);
       expect(find.byType(DietCard), findsWidgets);
 
@@ -96,63 +99,26 @@ void main() {
       // Verifikasi modal resep muncul
       expect(find.byType(RecipeDetailModal), findsOneWidget);
       Navigator.pop(tester.element(find.byType(RecipeDetailModal)));
+      await tester.pumpAndSettle(const Duration(seconds: 4));
+      expect(find.byType(SingleChildScrollView), findsWidgets);
+      await tester.drag(find.byType(SingleChildScrollView).first, const Offset(0, -300));
       await tester.pumpAndSettle();
-
-      // Buka drawer dan navigasi ke Pengaturan Akun
-      await tester.tap(find.byKey(const Key('Pengaturan')));
-      await tester.pumpAndSettle();
-      expect(find.byType(Drawer), findsOneWidget);
-      expect(find.byKey(const Key('PengaturanAkun')), findsOneWidget);
-
-      await tester.tap(find.byKey(const Key('PengaturanAkun')));
-      await tester.pumpAndSettle();
-
-      // Verifikasi halaman profile muncul
-      expect(find.byKey(const Key('AvatarProfile')), findsOneWidget);
-      await tester.pumpAndSettle();
-      // Tap tombol edit
-      await tester.tap(find.byKey(const Key('Edit')).at(0));
-      await tester.pumpAndSettle(const Duration(seconds: 3));
-
-      // Verifikasi dialog edit muncul
-      expect(find.byType(Dialog), findsOneWidget);
-
-      // Pilih jenis diet
-      await tester.tap(find.byKey(const Key('DropDownButton')),
-          warnIfMissed: false);
-      await tester.pumpAndSettle();
-      final offset = tester.getTopLeft(find.text('Diet Normal').at(0));
-      await tester.tapAt(offset);
       await tester.pumpAndSettle(const Duration(seconds: 2));
-
-      // Simpan perubahan
-      await tester.tap(find.byKey(const Key('Simpan')), warnIfMissed: false);
+      expect(find.byType(CustomBottomNavigationBar), findsWidgets);
+      expect(find.byIcon(Icons.message_rounded), findsWidgets);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.tap(find.byIcon(Icons.message_rounded));
       await tester.pumpAndSettle();
-
-      Navigator.pop(tester.element(find.byType(Dialog)));
-      await tester.pumpAndSettle();
-
-      // Verifikasi perubahan berhasil
-      expect(find.text('Diet Normal'), findsOneWidget);
-      await tester.pumpAndSettle();
-      expect(find.byKey(const Key('IconBack')), findsOneWidget);
-      await tester.pumpAndSettle();
-
-      // Kembali ke halaman sebelumnya
-      await tester.tap(find.byKey(const Key('IconBack')), warnIfMissed: false);
-      await tester.pumpAndSettle();
-      await tester.pumpAndSettle();
-
-      expect(find.byType(CarouselSlider), findsOneWidget);
-
-      await tester.pumpAndSettle();
-      // await tester.tap(find.byKey(const Key('DeteksiPage')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(RawGestureDetector,
-          'DETEKSI')); // Nama label sesuai dengan BottomNavigationBarItem
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 1));
       expect(find.byType(AppBar), findsOneWidget);
-      expect(find.text('FOODPLAN APP'), findsOneWidget);
+      expect(find.byType(TextField), findsOneWidget);
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).at(0), 'Apa itu diet ?');
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.send).first);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.text('diet adalah'), findsWidgets);
+      await tester.pumpAndSettle();
     });
   });
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class DietCard extends StatelessWidget {
@@ -18,10 +19,17 @@ class DietCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Decode base64 image if valid
-    Uint8List bytes = image_src == 'No Images'
-        ? Uint8List(0) // If no image, provide empty byte array
-        : base64Decode(image_src.split(',').last);
+    Uint8List? bytes;
+
+    // Tentukan apakah image_src adalah Base64 atau URL
+    if (image_src.startsWith('data:image')) {
+      try {
+        bytes = base64Decode(image_src.split(',').last);
+      } catch (e) {
+        // Jika decoding gagal, set bytes ke null
+        bytes = null;
+      }
+    }
 
     return GestureDetector(
       onTap: onTap,
@@ -33,14 +41,23 @@ class DietCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-              child: bytes.isEmpty
-                  ? const Icon(Icons.image, size: 50) // Default icon
-                  : Image.memory(
+              child: bytes != null
+                  ? Image.memory(
                       bytes,
                       fit: BoxFit.cover,
                       height: 172.7,
                       width: double.infinity,
-                    ),
+                    )
+                  : image_src.startsWith('http')
+                      ? CachedNetworkImage(
+                          imageUrl: image_src,
+                          fit: BoxFit.cover,
+                          height: 172.7,
+                          width: double.infinity,
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        )
+                      : const Icon(Icons.image, size: 50), // Default icon jika gambar tidak ada
             ),
             Container(
               padding: const EdgeInsets.symmetric(vertical: 8.0), // Adjusted padding

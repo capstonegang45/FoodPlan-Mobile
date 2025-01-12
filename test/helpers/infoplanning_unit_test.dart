@@ -35,9 +35,10 @@ void main() {
 
   group('Aktivitas', () {
     test('should create a widget with the correct activity', () {
-      const aktivitas = 'Olahraga setiap hari selama 30 menit';
-      // ignore: prefer_const_constructors
-      final widget = Aktivitas(aktivitas: aktivitas);
+      const aktivitas = 'Pagi: Olahraga setiap hari selama 30 menit;';
+      const widget = Aktivitas(aktivitas: aktivitas);
+
+      // Verifikasi bahwa aktivitas sesuai
       expect(widget.aktivitas, aktivitas);
     });
   });

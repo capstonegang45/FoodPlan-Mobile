@@ -13,6 +13,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed, // Tambahkan ini
       backgroundColor: Colors.teal[900],
       selectedItemColor: Colors.white,
       unselectedItemColor: Colors.grey,
@@ -28,6 +29,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
           key: Key('DeteksiPage'),
           icon: Icon(Icons.camera_alt_outlined),
           label: 'DETEKSI',
+        ),
+        BottomNavigationBarItem(
+          key: Key('ChattbotPage'),
+          icon: Icon(Icons.message_rounded),
+          label: 'CHATBOT',
         ),
         BottomNavigationBarItem(
           key: Key('RencanaPage'),

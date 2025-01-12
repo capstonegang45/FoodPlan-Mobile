@@ -69,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       // Navigasi ke halaman validasi
       // ignore: use_build_context_synchronously
-      Navigator.pushReplacementNamed(context, '/validasi');
+      Navigator.pushReplacementNamed(context, '/login');
     } else {
       // Tampilkan pesan error
       setState(() {
@@ -180,6 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
             // Tombol Register
             ElevatedButton(
+              key: const Key('Register Button'),
               onPressed: _isLoading ? null : _register,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 68, 91, 75),

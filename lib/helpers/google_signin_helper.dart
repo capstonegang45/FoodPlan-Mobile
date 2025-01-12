@@ -6,13 +6,13 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleSignInHelper {
+  static GoogleSignIn googleSignIn = GoogleSignIn(
+    clientId:
+      "705335153334-akppt6gdk3vjkrm72i1j8qutpr2df6fg.apps.googleusercontent.com", // Ganti dengan Client ID yang benar
+  );
   static Future<Map<String, dynamic>> signInWithGoogle(
       String backendUrl) async {
     try {
-      GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId:
-            "705335153334-akppt6gdk3vjkrm72i1j8qutpr2df6fg.apps.googleusercontent.com", // Ganti dengan Client ID yang benar
-      );
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
         throw Exception("Login dibatalkan oleh pengguna.");
@@ -70,5 +70,9 @@ class GoogleSignInHelper {
     } catch (e) {
       return {'success': false, 'message': e.toString()};
     }
+  }
+
+  static Future<void> signOut() async {
+    await googleSignIn.signOut();
   }
 }

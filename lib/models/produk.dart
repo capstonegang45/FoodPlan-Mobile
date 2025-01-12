@@ -10,7 +10,7 @@ class Product {
   final String description;
   final String categoryName;
   // ignore: non_constant_identifier_names
-  final String image_src; // Bisa null jika tidak ada gambar
+  late final String image_src; // Bisa null jika tidak ada gambar
 
   // Constructor
   Product({

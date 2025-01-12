@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:food_plan/models/config.dart';
 import 'package:food_plan/pages/verify_otp.dart';
@@ -27,11 +28,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final email = _emailController.text;
     if (email.isEmpty) {
       await showCustomToastNotification(
-        context: context,
-        title: 'Error',
-        message: 'Email tidak boleh kosong!',
-        type: ToastificationType.error // Warna merah untuk kesalahan
-      );
+          context: context,
+          title: 'Error',
+          message: 'Email tidak boleh kosong!',
+          type: ToastificationType.error // Warna merah untuk kesalahan
+          );
       setState(() {
         _isLoading = false;
       });
@@ -49,11 +50,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       final responseData = json.decode(response.body);
       if (response.statusCode == 200) {
         await showCustomToastNotification(
-          context: context, 
-          title: 'Success', 
-          message: responseData['message'], 
-          type: ToastificationType.success
-        );
+            context: context,
+            title: 'Success',
+            message: responseData['message'],
+            type: ToastificationType.success);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -62,19 +62,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         );
       } else {
         await showCustomToastNotification(
-          context: context,
-          title: 'Error',
-          message: responseData['message'],
-          type: ToastificationType.error // Warna merah untuk kesalahan
-        );
+            context: context,
+            title: 'Error',
+            message: responseData['message'],
+            type: ToastificationType.error // Warna merah untuk kesalahan
+            );
       }
     } catch (error) {
       await showCustomToastNotification(
-        context: context,
-        title: 'Error',
-        message: 'Terjadi kesalahan!',
-        type: ToastificationType.error// Warna merah untuk kesalahan
-      );
+          context: context,
+          title: 'Error',
+          message: 'Terjadi kesalahan!',
+          type: ToastificationType.error // Warna merah untuk kesalahan
+          );
     } finally {
       setState(() {
         _isLoading = false;
@@ -165,9 +165,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                       onPressed: _isLoading ? null : _sendOTP,
                       child: _isLoading
-                          ? const CircularProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                          ? AnimatedTextKit(
+                              animatedTexts: [
+                                TypewriterAnimatedText(
+                                  'Loading...',
+                                  textStyle: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                  speed: const Duration(milliseconds: 100),
+                                ),
+                              ],
+                              pause: const Duration(
+                                  milliseconds:
+                                      300), // Pause between repetitions
                             )
                           : const Text(
                               'Kirim OTP',

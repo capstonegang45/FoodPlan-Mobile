@@ -26,9 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
 
   void _loginWithFacebook() async {
+    await FacebookSignInHelper.signOut();
     // ignore: unnecessary_string_interpolations
     String backendUrl = "$baseUrl";
-
     final result = await FacebookSignInHelper.signInWithFacebook(backendUrl);
 
     if (result['success']) {
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _handleGoogleSignIn() async {
     setState(() => _isLoading = true);
-
+    await GoogleSignInHelper.signOut();
     // ignore: unnecessary_string_interpolations
     const backendUrl = '$baseUrl'; // Ganti dengan URL Flask kamu
     final result = await GoogleSignInHelper.signInWithGoogle(backendUrl);
@@ -120,46 +120,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _isLoading = false);
   }
-
-  // void _showSuccessDialog(String message) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text('Login Successful'),
-  //         content: Text(message),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: const Text('OK'),
-  //             onPressed: () {
-  //               Navigator.pushReplacementNamed(context, '/validasi');
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
-
-  // void _showErrorDialog(String message) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text('Login Failed'),
-  //         content: Text(message),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: const Text('OK'),
-  //             onPressed: () {
-  //               Navigator.pop(context);
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {

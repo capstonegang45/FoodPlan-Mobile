@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:food_plan/models/produk.dart';
 
@@ -42,15 +41,51 @@ class RecipeDetailModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Decode base64 image if available
-    Uint8List? bytes;
-    // ignore: unnecessary_null_comparison
-    if (product.image_src != null && product.image_src != 'No Images') {
+    Widget imageWidget;
+
+    // Tentukan jenis gambar: base64, URL, atau placeholder
+    if (product.image_src == 'No Images') {
+      imageWidget = const Icon(
+        Icons.image,
+        size: 100,
+        color: Colors.grey,
+      ); // Placeholder jika tidak ada gambar
+    } else if (product.image_src.startsWith('data:image')) {
+      // Base64 image
       try {
-        bytes = base64Decode(product.image_src.split(',').last);
+        final bytes = base64Decode(product.image_src.split(',').last);
+        imageWidget = Image.memory(
+          bytes,
+          fit: BoxFit.cover,
+          width: double.infinity,
+        );
       } catch (e) {
-        bytes = null;
+        imageWidget = const Icon(
+          Icons.broken_image,
+          size: 100,
+          color: Colors.grey,
+        ); // Placeholder untuk base64 yang gagal
       }
+    } else if (product.image_src.startsWith('http')) {
+      // URL image
+      imageWidget = Image.network(
+        product.image_src,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(
+            Icons.broken_image,
+            size: 100,
+            color: Colors.grey,
+          ); // Placeholder jika URL gagal dimuat
+        },
+      );
+    } else {
+      imageWidget = const Icon(
+        Icons.image,
+        size: 100,
+        color: Colors.grey,
+      ); // Placeholder jika format tidak dikenali
     }
 
     return DraggableScrollableSheet(
@@ -62,7 +97,7 @@ class RecipeDetailModal extends StatelessWidget {
           controller: scrollController,
           child: Column(
             children: [
-              // Header dengan warna amber
+              // Header dengan warna hijau gelap
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -90,22 +125,13 @@ class RecipeDetailModal extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
                     const SizedBox(height: 10),
-                    // Image
-                    bytes == null
-                        ? const Icon(Icons.image,
-                            size: 100,
-                            color: Colors.grey) // Placeholder if no image
-                        : Image.memory(
-                            bytes,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          ),
+                    // Gambar
+                    imageWidget,
                     const SizedBox(height: 10),
                     Text(product.description),
                     const SizedBox(height: 10),
-                    // TabBar and TabBarView
+                    // TabBar dan TabBarView
                     DefaultTabController(
                       length: 3,
                       child: Column(
@@ -139,10 +165,8 @@ class RecipeDetailModal extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        _buildNutritionRow(
-                                            "Karbohidrat",
-                                            product.carbohidrat.toDouble(),
-                                            200.0),
+                                        _buildNutritionRow("Karbohidrat",
+                                            product.carbohidrat.toDouble(), 200.0),
                                         const SizedBox(height: 10),
                                         _buildNutritionRow("Protein",
                                             product.protein.toDouble(), 100.0),

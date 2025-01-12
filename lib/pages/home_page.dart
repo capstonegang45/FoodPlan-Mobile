@@ -1,15 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_plan/helpers/beranda_helper.dart';
+import 'package:food_plan/helpers/auth_service.dart';
 import 'package:food_plan/helpers/logout_helper.dart';
-import 'package:food_plan/models/produk.dart';
-import 'package:food_plan/widgets/custom_bottom_nav.dart';
-import 'package:food_plan/widgets/custom_btn.dart';
+import 'package:food_plan/provider/users_providers.dart';
+import 'package:food_plan/widgets/diet_card.dart';
 import 'package:food_plan/widgets/produk_list.dart';
 import 'package:food_plan/widgets/recipe_modal.dart';
-import 'package:food_plan/widgets/diet_card.dart';
-import 'package:food_plan/models/user.dart';
+import 'package:food_plan/widgets/custom_bottom_nav.dart';
+import 'package:provider/provider.dart'; // Import provider package
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,13 +24,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  late Future<Map<String, dynamic>> futureData;
 
   @override
   void initState() {
     super.initState();
-    futureData =
-        getUserProfileAndProducts(); // Mengambil data dengan userId = 1
+    Provider.of<UserProvider>(context, listen: false).loadData();
   }
 
   void _onItemTapped(int index) {
@@ -43,10 +44,74 @@ class _HomePageState extends State<HomePage> {
           Navigator.pushReplacementNamed(context, '/deteksi');
           break;
         case 2:
+          Navigator.pushReplacementNamed(context, '/chatbot');
+          break;
+        case 3:
           Navigator.pushReplacementNamed(context, '/rencana');
           break;
       }
     }
+  }
+
+  Future<void> _handleDeleteAccount() async {
+    bool? confirmDelete = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        bool isLoading = false;
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Konfirmasi Hapus Akun'),
+              content: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : const Text(
+                      'Apakah Anda yakin ingin menghapus akun ini? Tindakan ini tidak dapat dibatalkan.'),
+              actions: [
+                if (!isLoading)
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: const Text('Batal'),
+                  ),
+                if (!isLoading)
+                  TextButton(
+                    onPressed: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      try {
+                        final result = await AuthService.deleteAccount();
+                        await FirebaseAuth.instance.signOut();
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(result['message'] ??
+                                  'Akun berhasil dihapus')),
+                        );
+
+                        Navigator.pushReplacementNamed(context, '/login');
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Gagal menghapus akun: $e')),
+                        );
+
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    },
+                    child: const Text('Hapus'),
+                  ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (confirmDelete != true) return;
   }
 
   Future<bool?> _showLogoutConfirmationDialog(BuildContext context) async {
@@ -88,27 +153,34 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: FutureBuilder<Map<String, dynamic>>(
-          future: futureData,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return const Text('Error loading data');
-            } else if (!snapshot.hasData) {
-              return const Text('No data available');
+        title: Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            final user = userProvider.user;
+            if (user == null) {
+              return AnimatedTextKit(
+                animatedTexts: [
+                  TypewriterAnimatedText(
+                    'Loading...',
+                    textStyle: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.teal[900]),
+                    speed: const Duration(milliseconds: 100),
+                  ),
+                ],
+                repeatForever: true,
+                pause: const Duration(
+                    milliseconds: 300), // Pause between repetitions
+              );
             }
-
-            final user =
-                User.fromJson(snapshot.data!['user']); // Ambil data user
-            // Ambil data produk
-
             final avatarBytes = base64Decode(user.avatar!.split(',')[1]);
-
             return Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: MemoryImage(avatarBytes),
+                  backgroundImage: user.avatar!.startsWith('http')
+                      ? NetworkImage(user.avatar!) // Jika URL
+                      : MemoryImage(avatarBytes) // Jika base64
+                          as ImageProvider,
                 ),
                 const SizedBox(width: 10),
                 Column(
@@ -146,22 +218,16 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       endDrawer: Drawer(
-        key: const Key('Drawer'), 
+        key: const Key('Drawer'),
         child: Column(
           children: [
             // Bagian header untuk informasi user
-            FutureBuilder<Map<String, dynamic>>(
-              future: futureData,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Error loading data'));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: Text('No data available'));
+            Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+                final user = userProvider.user;
+                if (user == null) {
+                  return const CircularProgressIndicator();
                 }
-
-                final user = User.fromJson(snapshot.data!['user']);
                 final avatarBytes = base64Decode(user.avatar!.split(',')[1]);
 
                 return Container(
@@ -187,7 +253,10 @@ class _HomePageState extends State<HomePage> {
                       CircleAvatar(
                         key: const Key('DrawerAvatar'),
                         radius: 40,
-                        backgroundImage: MemoryImage(avatarBytes),
+                        backgroundImage: user.avatar!.startsWith('http')
+                            ? NetworkImage(user.avatar!) // Jika URL
+                            : MemoryImage(avatarBytes) // Jika base64
+                                as ImageProvider,
                       ),
                       const SizedBox(height: 16),
                       Text(
@@ -228,25 +297,43 @@ class _HomePageState extends State<HomePage> {
                   ),
                   _buildModernMenuDivider(),
                   _buildModernMenuItem(
+                    key: const Key('Atur Notifikasi'),
+                    icon: Icons.timeline,
+                    title: 'Atur Notifikasi',
+                    onTap: () => Navigator.pushReplacementNamed(
+                        context, '/setting-notifikasi'),
+                  ),
+                  _buildModernMenuDivider(),
+                  _buildModernMenuItem(
                     icon: Icons.logout,
                     title: 'Logout',
                     onTap: () async {
                       // Tampilkan dialog konfirmasi sebelum logout
-                      bool? shouldLogout = await _showLogoutConfirmationDialog(context);
+                      bool? shouldLogout =
+                          await _showLogoutConfirmationDialog(context);
                       if (shouldLogout!) {
                         try {
                           // Panggil metode logout
                           await LogoutHelper().logout();
                           // Navigasi ke halaman login atau halaman lainnya setelah logout
-                          // ignore: use_build_context_synchronously
                           Navigator.pushReplacementNamed(context, '/login');
-                        // ignore: empty_catches
-                        } catch (e) {
-                        }
+                          // ignore: empty_catches
+                        } catch (e) {}
                       }
                     },
                   ),
                 ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ElevatedButton(
+                onPressed: _handleDeleteAccount,
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white // Button color
+                    ),
+                child: const Text('Hapus Akun'),
               ),
             ),
             // Footer
@@ -272,13 +359,14 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: CarouselSlider(
+                key: const Key('CarouselSlider'),
                 options: CarouselOptions(
                   height: 100.0,
                   autoPlay: true,
                   enlargeCenterPage: true,
                   viewportFraction: 0.9,
                   aspectRatio: 1.0,
-                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayInterval: const Duration(minutes: 10),
                 ),
                 items: bannerImages.map((imagePath) {
                   return Builder(
@@ -299,111 +387,95 @@ class _HomePageState extends State<HomePage> {
                 }).toList(),
               ),
             ),
-            // Menampilkan Produk
-            FutureBuilder<Map<String, dynamic>>(
-              future: futureData,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Error loading products'));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: Text('No products available'));
-                }
+            Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+                final matchingProducts = userProvider.matchingProducts;
+                final otherProducts = userProvider.otherProducts;
 
-                final matchingProducts = List<Map<String, dynamic>>.from(
-                  snapshot.data!['products']['matching_products'] ?? [],
-                ).map((e) => Product.fromJson(e)).toList();
-
-                final otherProducts = List<Map<String, dynamic>>.from(
-                  snapshot.data!['products']['other_products'] ?? [],
-                ).map((e) => Product.fromJson(e)).toList();
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text(
-                        matchingProducts.isNotEmpty
-                            ? 'REKOMENDASI RESEP ${matchingProducts[0].categoryName.toUpperCase()}'
-                            : 'Rekomendasi Resep',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.9,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 12,
-                      ),
-                      itemCount: matchingProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = matchingProducts[index];
-                        return DietCard(
-                          key: const Key("DietCard"),
-                          title: product.title,
-                          image_src: product.image_src,
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) =>
-                                  RecipeDetailModal(
-                                    key: const Key('RecipeDetailModal'),
-                                    product: product),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        'REKOMENDASI DIET LAINNYA',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount:
-                          otherProducts.length > 10 ? 10 : otherProducts.length,
-                      itemBuilder: (context, index) {
-                        final product = otherProducts[index];
-                        return ProductListItem(
-                          title: product.title,
-                          description: product.description,
-                          imageSrc: product.image_src,
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) =>
-                                  RecipeDetailModal(product: product),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: CustomButton(
-                        label: 'Lihat Resep Lainnya',
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/fullresep');
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Carousel Slider and other widgets...
+                      if (matchingProducts.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'REKOMENDASI RESEP ${matchingProducts[0].categoryName.toUpperCase()}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.9,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                        ),
+                        itemCount: matchingProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = matchingProducts[index];
+                          return DietCard(
+                            title: product.title,
+                            image_src: product.image_src,
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) =>
+                                    RecipeDetailModal(product: product),
+                              );
+                            },
+                          );
                         },
                       ),
-                    ),
-                  ],
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'REKOMENDASI DIET LAINNYA',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 350,
+                        child: SingleChildScrollView(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: otherProducts.length > 10
+                                ? 10
+                                : otherProducts.length,
+                            itemBuilder: (context, index) {
+                              final product = otherProducts[index];
+                              return ProductListItem(
+                                title: product.title,
+                                description: product.description,
+                                imageSrc: product.image_src,
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) =>
+                                        RecipeDetailModal(product: product),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
@@ -411,7 +483,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        key: const Key('BottomNavigationBar'),
         selectedIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
@@ -419,9 +490,11 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// Fungsi untuk membuat menu item modern
 Widget _buildModernMenuItem(
-    {required IconData icon, required String title, VoidCallback? onTap, Key? key}) {
+    {required IconData icon,
+    required String title,
+    VoidCallback? onTap,
+    Key? key}) {
   return InkWell(
     key: key,
     onTap: onTap,

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:food_plan/models/config.dart';
@@ -19,6 +21,7 @@ Future<Map<String, dynamic>> getUserProfileAndProducts() async {
         'Authorization': 'Bearer $token',
       },
     );
+    print(response.body);
 
     if (response.statusCode == 200) {
       // Parsing JSON response

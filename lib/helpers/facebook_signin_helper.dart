@@ -65,4 +65,8 @@ class FacebookSignInHelper {
       return {'success': false, 'message': e.toString()};
     }
   }
+
+  static Future<void> signOut() async {
+    await FacebookAuth.instance.logOut();// Logs out from Firebase
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import '/pages/overview.dart'; 
+import '/pages/overview.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -33,8 +33,8 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset('assets/img/logolagi.png'),
             const SizedBox(height: 20),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+            CircularProgressIndicator(
+              color: Colors.teal[900],
             ),
           ],
         ),

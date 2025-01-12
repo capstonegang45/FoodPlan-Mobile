@@ -56,6 +56,25 @@ void main() {
           findsOneWidget); // Verifikasi halaman register
       expect(find.text('Daftar terlebih dahulu untuk melanjutkan'),
           findsOneWidget); // Verifikasi halaman register
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).at(0), 'Admin Testing');
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).at(1), 'Admin123');
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).at(2), 'admin@gmail.com');
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).at(3), 'Admin123');
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).at(4), 'Admin123');
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      await tester.drag(
+          find.byType(SingleChildScrollView), const Offset(0, -220));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('Register Button')));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      expect(find.text('Masuk'), findsOneWidget);
+      await tester.pumpAndSettle();
     },
   );
 }

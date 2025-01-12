@@ -2,8 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:food_plan/helpers/validasi_helper.dart';
+import 'package:food_plan/provider/rencana_providers.dart';
 import 'package:food_plan/widgets/customBtnBorder.dart';
 import 'package:food_plan/widgets/toastification_wigdet.dart';
+import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 class ValidasiScreen extends StatefulWidget {
@@ -37,6 +39,13 @@ class _ValidasiScreenState extends State<ValidasiScreen> {
         );
 
         if (response['status'] == 'success') {
+          Future.microtask(() {
+            final provider =
+                Provider.of<RencanaProvider>(context, listen: false);
+            if (provider.plans.isEmpty) {
+              provider.loadPlans(); // Hanya panggil jika data belum ada
+            }
+          });
           // Navigasi ke halaman berikutnya jika berhasil
           await showCustomToastNotification(
               context: context,

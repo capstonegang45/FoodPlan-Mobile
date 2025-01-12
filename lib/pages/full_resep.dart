@@ -18,7 +18,13 @@ class _FullResepState extends State<FullResep> {
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         centerTitle: true,
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          key: const Key('IconBack'),
+          icon: const Icon(Icons.arrow_back, color: Colors.white,),
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, '/beranda');
+          },
+        ),
       ),
     );
   }

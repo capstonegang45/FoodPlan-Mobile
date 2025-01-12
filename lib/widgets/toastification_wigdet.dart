@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
+bool isTestMode = false;
+
 Future<void> showCustomToastNotification({
   required BuildContext context,
   required String title,
   required String message,
   required ToastificationType type,
 }) async {
+  if (isTestMode) {
+    return;
+  }
   // ignore: await_only_futures
   await Toastification().show(
     context: context,

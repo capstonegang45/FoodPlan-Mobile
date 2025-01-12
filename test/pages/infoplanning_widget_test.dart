@@ -18,20 +18,21 @@ void main() {
       home: Scaffold(body: InformasiRencana(informasi: informasi)),
     ));
 
-    expect(find.text('Deskripsi:'), findsOneWidget);
     expect(find.text('Deskripsi Test'), findsOneWidget);
-    expect(find.text('Tingkat Kesulitan:'), findsOneWidget);
     expect(find.text('Mudah'), findsOneWidget);
   });
 
-  testWidgets('Aktivitas displays activity correctly',
-      (WidgetTester tester) async {
-    const aktivitas = 'Olahraga setiap hari selama 30 menit';
+  testWidgets('Aktivitas displays activity correctly', (WidgetTester tester) async {
+    const aktivitas = 'Pagi: Olahraga setiap hari selama 30 menit;';
 
     await tester.pumpWidget(const MaterialApp(
       home: Scaffold(body: Aktivitas(aktivitas: aktivitas)),
     ));
 
-    expect(find.text(aktivitas), findsOneWidget);
+    // Verifikasi teks waktu (PAGI)
+    expect(find.text('PAGI'), findsOneWidget);
+
+    // Verifikasi teks aktivitas dengan bullet
+    expect(find.text('• Olahraga setiap hari selama 30 menit'), findsOneWidget);
   });
 }

@@ -1,10 +1,10 @@
 // deteksi_helper.dart
 import 'dart:convert';
 import 'dart:io';
-import 'package:food_plan/models/config.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:food_plan/models/config.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DeteksiHelper {
   final ImagePicker _picker = ImagePicker();

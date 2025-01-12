@@ -13,9 +13,11 @@ class Overview1 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Plate Image
-            Image.asset(
-              'assets/img/food_plate.png',
-              height: 200,
+            Expanded(
+              child: Image.asset(
+                'assets/img/food_plate.png',
+                height: 200,
+              ),
             ),
             const SizedBox(height: 32),
 
@@ -114,10 +116,13 @@ class Overview2 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Plate Image
-            Image.asset(
-              'assets/img/food_plate.png',
-              height: 200,
+            Expanded(
+              child: Image.asset(
+                'assets/img/food_plate.png',
+                height: 200,
+              ),
             ),
+
             const SizedBox(height: 32),
 
             // Title
@@ -214,10 +219,13 @@ class Overview3 extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Plate Image
-            Image.asset(
-              'assets/img/food_plate.png',
-              height: 200,
+            Expanded(
+              child: Image.asset(
+                'assets/img/food_plate.png',
+                height: 200,
+              ),
             ),
+
             const SizedBox(height: 32),
 
             // Title

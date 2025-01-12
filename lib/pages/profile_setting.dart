@@ -7,6 +7,7 @@ import 'package:food_plan/helpers/profile_helper.dart';
 import 'package:food_plan/widgets/toastification_wigdet.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toastification/toastification.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({super.key});
@@ -38,7 +39,21 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
         future: userProfile(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: AnimatedTextKit(
+                animatedTexts: [
+                  TypewriterAnimatedText(
+                    'Loading...',
+                    textStyle: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.teal),
+                    speed: const Duration(milliseconds: 100),
+                  ),
+                ],
+                pause: const Duration(
+                    milliseconds: 300), // Pause between repetitions
+              ),
+            );
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),
@@ -285,6 +300,7 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   message: 'Perubahan Telah Disimpan!', 
                   type: ToastificationType.success
                 );
+                // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               },
               child: const Text('Simpan'),

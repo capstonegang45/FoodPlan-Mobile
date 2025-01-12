@@ -18,9 +18,12 @@ class ProductListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isBase64 = imageSrc.startsWith('data:image');
     Uint8List bytes = imageSrc == 'No Images'
-        ? Uint8List(0)
-        : base64Decode(imageSrc.split(',').last);
+        ? Uint8List(0) // Fallback for 'No Images'
+        : imageSrc.startsWith('data:image')
+            ? base64Decode(imageSrc.split(',').last) // Decode base64 image
+            : Uint8List(0);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -30,17 +33,25 @@ class ProductListItem extends StatelessWidget {
       ),
       child: ListTile(
         leading: SizedBox(
-          width: 50, // Lebar maksimum untuk gambar
-          height: 50, // Tinggi maksimum untuk gambar
-          child: bytes.isEmpty
-              ? const Icon(Icons.image, size: 50) // Default icon jika tidak ada gambar
-              : ClipRRect(
+          width: 50, // Max width for image
+          height: 50, // Max height for image
+          child: isBase64
+              ? ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.memory(
                     bytes,
                     fit: BoxFit.cover,
                   ),
-                ),
+                )
+              : (imageSrc.startsWith('http') // If it's a URL, use Image.network
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        imageSrc,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : const Icon(Icons.image, size: 50)), // Default icon if no image
         ),
         title: Text(
           title,
