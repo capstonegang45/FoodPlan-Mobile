@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ProductListItem extends StatelessWidget {
@@ -46,9 +47,10 @@ class ProductListItem extends StatelessWidget {
               : (imageSrc.startsWith('http') // If it's a URL, use Image.network
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        imageSrc,
+                      child: CachedNetworkImage(
+                        imageUrl: imageSrc,
                         fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     )
                   : const Icon(Icons.image, size: 50)), // Default icon if no image

@@ -2,11 +2,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:food_plan/pages/chattbot.dart';
+import 'package:food_plan/pages/deteksi.dart';
 import 'package:food_plan/pages/home_page.dart';
 import 'package:food_plan/pages/login.dart';
+import 'package:food_plan/pages/profile_setting.dart';
 import 'package:food_plan/pages/validasi.dart';
-import 'package:food_plan/provider/chat_provider.dart';
 import 'package:food_plan/provider/rencana_providers.dart';
 import 'package:food_plan/provider/users_providers.dart';
 import 'package:food_plan/widgets/custom_bottom_nav.dart';
@@ -24,7 +24,6 @@ void main() {
         providers: [
           ChangeNotifierProvider(create: (_) => UserProvider()),
           ChangeNotifierProvider(create: (_) => RencanaProvider()),
-          ChangeNotifierProvider(create: (_) => ChatProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -33,7 +32,8 @@ void main() {
             '/login': (context) => const LoginScreen(),
             '/validasi': (context) => const ValidasiScreen(),
             '/beranda': (context) => const HomePage(),
-            '/chatbot': (context) => const ChatScreen(),
+            '/deteksi': (context) => const DeteksiPage(),
+            '/profile': (context) => const ProfileSettingsPage(),
           },
         ),
       ));
@@ -101,24 +101,73 @@ void main() {
       Navigator.pop(tester.element(find.byType(RecipeDetailModal)));
       await tester.pumpAndSettle(const Duration(seconds: 4));
       expect(find.byType(SingleChildScrollView), findsWidgets);
-      await tester.drag(find.byType(SingleChildScrollView).first, const Offset(0, -300));
+      await tester.drag(
+          find.byType(SingleChildScrollView).first, const Offset(0, -300));
       await tester.pumpAndSettle();
       await tester.pumpAndSettle(const Duration(seconds: 2));
       expect(find.byType(CustomBottomNavigationBar), findsWidgets);
-      expect(find.byIcon(Icons.message_rounded), findsWidgets);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
-      await tester.tap(find.byIcon(Icons.message_rounded));
+      // Buka drawer dan navigasi ke Pengaturan Akun
+      await tester.tap(find.byKey(const Key('Pengaturan')));
       await tester.pumpAndSettle();
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      expect(find.byType(Drawer), findsOneWidget);
+      expect(find.byKey(const Key('PengaturanAkun')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('PengaturanAkun')));
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Verifikasi halaman profile muncul
+      expect(find.byKey(const Key('AvatarProfile')), findsOneWidget);
+      await tester.pumpAndSettle();
+      // Tap tombol edit
+      await tester.tap(find.byKey(const Key('Edit')).at(0));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Verifikasi dialog edit muncul
+      expect(find.byType(Dialog), findsOneWidget);
+      // Pilih jenis diet
+      await tester.tap(find.byKey(const Key('DropDownButton')),
+          warnIfMissed: false);
+      await tester.pumpAndSettle();
+      final offset = tester.getTopLeft(find.text('Diet Normal').at(0));
+      await tester.tapAt(offset);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Simpan perubahan
+      await tester.tap(find.byKey(const Key('Simpan')), warnIfMissed: false);
+      await tester.pumpAndSettle();
+
+      Navigator.pop(tester.element(find.byType(Dialog)));
+      await tester.pumpAndSettle();
+
+      // Verifikasi perubahan berhasil
+      expect(find.text('Diet Normal'), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('IconBack')), findsOneWidget);
+      await tester.pumpAndSettle();
+
+      // Kembali ke halaman sebelumnya
+      await tester.tap(find.byKey(const Key('IconBack')), warnIfMissed: false);
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
+      expect(find.byType(CarouselSlider), findsOneWidget);
+      await tester.pumpAndSettle();
+      expect(find.byIcon(Icons.camera_alt_outlined), findsWidgets);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.tap(find.byIcon(Icons.camera_alt_outlined));
+      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(const Duration(seconds: 2));
       expect(find.byType(AppBar), findsOneWidget);
-      expect(find.byType(TextField), findsOneWidget);
       await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextField).at(0), 'Apa itu diet ?');
-      await tester.pumpAndSettle();
-      await tester.tap(find.byIcon(Icons.send).first);
+      await tester.tap(find.byKey(const Key('GestureDetectorGallery')));
       await tester.pumpAndSettle(const Duration(seconds: 2));
-      expect(find.text('diet adalah'), findsWidgets);
+      expect(find.byKey(const Key('bottomSheetImage')), findsOneWidget);
       await tester.pumpAndSettle();
+      Navigator.pop(tester.element(find.byKey(const Key('bottomSheetImage'))));
+      await tester.pumpAndSettle();
+      expect(find.byIcon(Icons.calendar_today_outlined), findsWidgets);
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.tap(find.byIcon(Icons.camera_alt_outlined));
     });
   });
 }

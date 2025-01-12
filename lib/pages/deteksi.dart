@@ -125,6 +125,7 @@ class _DeteksiPageState extends State<DeteksiPage> {
       isScrollControlled: true,
       builder: (BuildContext context) {
         return SizedBox(
+          key: const Key('bottomSheetImage'),
           height: MediaQuery.of(context).size.height * 0.5, // 60% dari layar
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -137,6 +138,7 @@ class _DeteksiPageState extends State<DeteksiPage> {
                       borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: ListTile(
+                      key: const Key('ButtonImages'),
                       leading: const Icon(Icons.photo_library, color: Colors.white,),
                       title: const Text('Pilih gambar dari galeri', style: TextStyle(color: Colors.white),),
                       onTap: () async {
@@ -300,6 +302,7 @@ class _DeteksiPageState extends State<DeteksiPage> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                key: const Key('Deteksi Button'),
                 onPressed: _isLoading ? null : _uploadAndDetect,
                 style: ButtonStyle(
                   backgroundColor: WidgetStateProperty.all(Colors.teal[900]),
