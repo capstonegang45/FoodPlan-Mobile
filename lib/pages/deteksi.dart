@@ -28,16 +28,6 @@ class _DeteksiPageState extends State<DeteksiPage> {
   List<dynamic> _matchingProducts = [];
   final DeteksiHelper _helper = DeteksiHelper();
 
-  // Fungsi untuk memilih gambar dari galeri
-  // Future<void> _pickImageFromGallery() async {
-  //   final image = await _helper.pickImageFromGallery();
-  //   if (image != null) {
-  //     setState(() {
-  //       _image = image;
-  //     });
-  //   }
-  // }
-
   // Fungsi untuk memilih gambar dari kamera
   Future<void> _pickImageFromCamera() async {
     final image = await _helper.pickImageFromCamera();

@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_plan/helpers/chattbot_helper.dart';
@@ -57,6 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // Add user's message first
     chatProvider.addMessage(message, "user",
         avatar: null, time: formattedTime); // Avatar user default
+    chatProvider.setBotTypingStatus(true);
 
     try {
       final response = await sendMessageAndGetResponse(message);
@@ -73,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
       chatProvider.addMessage(
         response['answer'],
         "bot",
-        avatar: null,// Use the default icon for the bot
+        avatar: null, // Use the default icon for the bot
       );
 
       // If avatar is received for the user, update the user's message
@@ -90,6 +92,8 @@ class _ChatScreenState extends State<ChatScreen> {
         SnackBar(content: Text("Error: $e")),
       );
     }
+    chatProvider.setBotTypingStatus(false);
+
     _messageController.clear();
   }
 
@@ -166,7 +170,8 @@ class _ChatScreenState extends State<ChatScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                chat["time"] ?? "", // Tambahkan waktu di sini (dapat diubah sesuai kebutuhan)
+                                chat["time"] ??
+                                    "", // Tambahkan waktu di sini (dapat diubah sesuai kebutuhan)
                                 style: TextStyle(
                                   fontSize: 10,
                                   color: Colors.grey[600],
@@ -193,6 +198,41 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
               ),
             ),
+            if (chatProvider.isBotTyping) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  children: [
+                    const CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      child: FaIcon(
+                        FontAwesomeIcons.robot,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    // Gunakan TyperAnimatedText dari animated_text_kit
+                    AnimatedTextKit(
+                      isRepeatingAnimation: false,
+                      totalRepeatCount: 1,
+                      pause: const Duration(milliseconds: 500),
+                      displayFullTextOnTap: true,
+                      animatedTexts: [
+                        TyperAnimatedText(
+                          "Bot is typing...",
+                          speed:
+                              const Duration(milliseconds: 100), // Kecepatan ketikan
+                          textStyle: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(

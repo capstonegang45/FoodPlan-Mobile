@@ -5,7 +5,16 @@ class ChatProvider with ChangeNotifier {
   final List<Map<String, String>> _chatHistory = [];
   List<Map<String, String>> get chatHistory => List.unmodifiable(_chatHistory);
 
-  void addMessage(String message, String sender, {String? avatar, String? time}) {
+  bool _isBotTyping = false;
+  bool get isBotTyping => _isBotTyping;
+
+  void setBotTypingStatus(bool isTyping) {
+    _isBotTyping = isTyping;
+    notifyListeners();
+  }
+
+  void addMessage(String message, String sender,
+      {String? avatar, String? time}) {
     final now = DateTime.now();
     final formattedTime = DateFormat('hh:mm a').format(now);
     _chatHistory.add({

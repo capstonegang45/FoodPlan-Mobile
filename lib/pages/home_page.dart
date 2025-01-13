@@ -387,6 +387,54 @@ class _HomePageState extends State<HomePage> {
                 }).toList(),
               ),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.all(20.0),
+            //   child: Center(
+            //     child: Row(
+            //       mainAxisAlignment:
+            //           MainAxisAlignment.spaceEvenly, // Menempatkan widget di tengah
+            //       children: [
+            //         Container(
+            //           height: 60,
+            //           width: 60,
+            //           decoration: BoxDecoration(
+            //             color: Colors.teal[900], // Warna latar belakang
+            //             borderRadius: BorderRadius.circular(
+            //                 8), // Sudut melengkung (opsional)
+            //           ),
+            //           child: const Icon(Icons.settings, size: 35, color: Colors.white),
+            //         ), // Jarak antar container
+            //         Container(
+            //           height: 60,
+            //           width: 60,
+            //           decoration: BoxDecoration(
+            //             color: Colors.teal[900],
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           child: const Icon(Icons.timeline, size: 35, color: Colors.white),
+            //         ),
+            //         Container(
+            //           height: 60,
+            //           width: 60,
+            //           decoration: BoxDecoration(
+            //             color: Colors.teal[900],
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           child: const Icon(Icons.comment, size: 35, color: Colors.white),
+            //         ),
+            //         Container(
+            //           height: 60,
+            //           width: 60,
+            //           decoration: BoxDecoration(
+            //             color: Colors.teal[900],
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           child: const Icon(Icons.access_alarm, size: 35, color: Colors.white),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             Consumer<UserProvider>(
               builder: (context, userProvider, child) {
                 final matchingProducts = userProvider.matchingProducts;

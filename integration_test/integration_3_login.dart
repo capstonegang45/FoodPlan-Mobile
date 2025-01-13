@@ -163,8 +163,13 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 2));
       expect(find.byKey(const Key('bottomSheetImage')), findsOneWidget);
       await tester.pumpAndSettle();
+      // await tester.tap(find.byType(Image).at(2));
+      // await tester.pumpAndSettle();
       Navigator.pop(tester.element(find.byKey(const Key('bottomSheetImage'))));
       await tester.pumpAndSettle();
+      // await tester.tap(find.byKey(const Key('DeteksiButton')));
+      // await tester.pumpAndSettle();
+      // await tester.pumpAndSettle(const Duration(seconds: 5));
       expect(find.byIcon(Icons.calendar_today_outlined), findsWidgets);
       await tester.pumpAndSettle(const Duration(seconds: 1));
       await tester.tap(find.byIcon(Icons.camera_alt_outlined));
