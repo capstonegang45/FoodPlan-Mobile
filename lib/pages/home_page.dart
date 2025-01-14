@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -12,7 +13,9 @@ import 'package:food_plan/widgets/diet_card.dart';
 import 'package:food_plan/widgets/produk_list.dart';
 import 'package:food_plan/widgets/recipe_modal.dart';
 import 'package:food_plan/widgets/custom_bottom_nav.dart';
-import 'package:provider/provider.dart'; // Import provider package
+import 'package:food_plan/widgets/sentiment_popup.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import provider package
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,11 +27,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     Provider.of<UserProvider>(context, listen: false).loadData();
+    _checkAndShowPopup();
+    _startPeriodicCheck();
   }
 
   void _onItemTapped(int index) {
@@ -51,6 +57,50 @@ class _HomePageState extends State<HomePage> {
           break;
       }
     }
+  }
+
+  void _startPeriodicCheck() {
+    // Cek setiap menit apakah harus menampilkan popup
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      _checkAndShowPopup();
+    });
+  }
+
+  Future<void> _checkAndShowPopup() async {
+    final now = DateTime.now();
+    final prefs = await SharedPreferences.getInstance();
+
+    // Ambil waktu terakhir popup muncul
+    final lastPopupTimeString = prefs.getString('lastPopupTime');
+    final lastPopupTime = lastPopupTimeString != null
+        ? DateTime.parse(lastPopupTimeString)
+        : null;
+
+    // Periksa jadwal (sebulan sekali pada hari Senin jam 10 pagi)
+    final isScheduledTime =
+        now.weekday == DateTime.monday && now.hour == 10 && now.minute == 0;
+
+    // Jika belum ada popup sebelumnya atau sudah lebih dari 30 hari
+    final isFirstTime = lastPopupTime == null;
+    final isMoreThanAMonth =
+        lastPopupTime != null && now.difference(lastPopupTime).inDays >= 30;
+
+    if (isScheduledTime && (isFirstTime || isMoreThanAMonth)) {
+      // Tampilkan popup
+      _showSentimentPopup();
+
+      // Simpan waktu terakhir popup muncul
+      prefs.setString('lastPopupTime', now.toIso8601String());
+    }
+  }
+
+  void _showSentimentPopup() {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // Allow dismiss by tapping outside
+      barrierColor: Colors.black.withOpacity(0.8),
+      builder: (context) => const SentimentPopup(),
+    );
   }
 
   Future<void> _handleDeleteAccount() async {
@@ -139,6 +189,12 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   final List<String> bannerImages = [
@@ -366,7 +422,7 @@ class _HomePageState extends State<HomePage> {
                   enlargeCenterPage: true,
                   viewportFraction: 0.9,
                   aspectRatio: 1.0,
-                  autoPlayInterval: const Duration(minutes: 10),
+                  autoPlayInterval: const Duration(seconds: 4),
                 ),
                 items: bannerImages.map((imagePath) {
                   return Builder(
@@ -388,52 +444,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             // Padding(
-            //   padding: const EdgeInsets.all(20.0),
-            //   child: Center(
-            //     child: Row(
-            //       mainAxisAlignment:
-            //           MainAxisAlignment.spaceEvenly, // Menempatkan widget di tengah
-            //       children: [
-            //         Container(
-            //           height: 60,
-            //           width: 60,
-            //           decoration: BoxDecoration(
-            //             color: Colors.teal[900], // Warna latar belakang
-            //             borderRadius: BorderRadius.circular(
-            //                 8), // Sudut melengkung (opsional)
-            //           ),
-            //           child: const Icon(Icons.settings, size: 35, color: Colors.white),
-            //         ), // Jarak antar container
-            //         Container(
-            //           height: 60,
-            //           width: 60,
-            //           decoration: BoxDecoration(
-            //             color: Colors.teal[900],
-            //             borderRadius: BorderRadius.circular(8),
-            //           ),
-            //           child: const Icon(Icons.timeline, size: 35, color: Colors.white),
-            //         ),
-            //         Container(
-            //           height: 60,
-            //           width: 60,
-            //           decoration: BoxDecoration(
-            //             color: Colors.teal[900],
-            //             borderRadius: BorderRadius.circular(8),
-            //           ),
-            //           child: const Icon(Icons.comment, size: 35, color: Colors.white),
-            //         ),
-            //         Container(
-            //           height: 60,
-            //           width: 60,
-            //           decoration: BoxDecoration(
-            //             color: Colors.teal[900],
-            //             borderRadius: BorderRadius.circular(8),
-            //           ),
-            //           child: const Icon(Icons.access_alarm, size: 35, color: Colors.white),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
+            //   padding: const EdgeInsets.all(16.0),
+            //   child: ElevatedButton(
+            //       onPressed: () {
+            //         _showSentimentPopup();
+            //       },
+            //       child: const Text('Beri Penilaian')),
             // ),
             Consumer<UserProvider>(
               builder: (context, userProvider, child) {
